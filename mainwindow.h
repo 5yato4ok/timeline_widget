@@ -1,12 +1,10 @@
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
-// #include <QGraphicsView>
-#include "bookmark.h"
-#include "groupbookmark.h"
+#include "generationhandler.h"
 #include "time_line.h"
 #include "ui_mainwindow.h"
+#include <QMainWindow>
 
 namespace time_line {
 class MainWindow : public QMainWindow {
@@ -19,6 +17,7 @@ public:
 
 private:
   TimeLine *time_line;
+  GenerationHandler handler;
   Ui::MainWindow ui;
 };
 } // namespace time_line

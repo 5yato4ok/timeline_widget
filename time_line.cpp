@@ -20,9 +20,10 @@ void TimeLine::paintEvent(QPaintEvent *evt) {
   painter.setPen(QPen{palette().buttonText().color(), 2});
   painter.drawLine(evt->rect().bottomLeft(), evt->rect().bottomRight());
   painter.setPen(palette().buttonText().color());
-  auto _visualScale = evt->rect().bottomRight().rx()/23;
+  const int shown_hours = 23;
+  auto _visualScale = evt->rect().bottomRight().rx() / shown_hours;
 
-  const int last_line = 23;
+  const int last_line = shown_hours;
   for (int first_line = 0; first_line <= last_line; ++first_line) {
     QString time_string{prettify(first_line)};
     painter.drawText(QPointF{first_line * _visualScale -
@@ -38,7 +39,6 @@ void TimeLine::paintEvent(QPaintEvent *evt) {
 
   return QWidget::paintEvent(evt);
 }
-
 
 QString TimeLine::prettify(int hours) const {
   QString result{"%1h"};
