@@ -15,9 +15,11 @@ namespace time_line {
 class TimeLine : public QWidget {
   Q_OBJECT
 public:
-  TimeLine(QMainWindow *parent);
+  TimeLine(QWidget *parent=nullptr);
   virtual void paintEvent(QPaintEvent *event) override;
-
+  static double getHourScale(const QRect& rect) {
+    return rect.bottomRight().rx() / 23;
+  }
 private:
   QString prettify(int seconds) const;
 };

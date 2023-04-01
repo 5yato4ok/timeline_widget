@@ -3,8 +3,9 @@
 #include <exception>
 namespace time_line {
 
-TimeLine::TimeLine(QMainWindow *parent) : QWidget(parent) {
+TimeLine::TimeLine(QWidget *parent) : QWidget(parent) {
   setFixedHeight(30);
+  setFixedWidth(parent->width());
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
@@ -20,11 +21,10 @@ void TimeLine::paintEvent(QPaintEvent *evt) {
   painter.setPen(QPen{palette().buttonText().color(), 2});
   painter.drawLine(evt->rect().bottomLeft(), evt->rect().bottomRight());
   painter.setPen(palette().buttonText().color());
-  const int shown_hours = 23;
-  auto _visualScale = evt->rect().bottomRight().rx() / shown_hours;
+  auto _visualScale = TimeLine::getHourScale(evt->rect());
 
-  const int last_line = shown_hours;
-  for (int first_line = 0; first_line <= last_line; ++first_line) {
+  const int shown_hours = 23;
+  for (int first_line = 0; first_line <= shown_hours; ++first_line) {
     QString time_string{prettify(first_line)};
     painter.drawText(QPointF{first_line * _visualScale -
                                  painter.fontMetrics()

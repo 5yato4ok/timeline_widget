@@ -4,15 +4,13 @@
 
 namespace time_line {
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), time_line(new TimeLine(this)) {
+    : QMainWindow(parent) {
   ui.setupUi(this);
-  ui.time_line_layout->addWidget(time_line);
-  handler = new GenerationHandler(ui.bkmrs_layout,this);
 
-  QObject::connect(ui.pushButton, &QPushButton::clicked, handler,
-                   &GenerationHandler::startGeneration);
-  QObject::connect(ui.spinBox, &QSpinBox::valueChanged, handler,
-                   &GenerationHandler::setNumOfBkmrs);
+  view_handler = new ViewHandler(this);
+  ui.graphicsLayout->addWidget(view_handler);
+  gen_handler = new GenerationHandler(nullptr,this);
+
 }
 
 } // namespace time_line

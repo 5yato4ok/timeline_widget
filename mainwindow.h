@@ -4,6 +4,7 @@
 #include "generationhandler.h"
 #include "time_line.h"
 #include "ui_mainwindow.h"
+#include "viewhandler.h"
 #include <QMainWindow>
 
 namespace time_line {
@@ -11,8 +12,8 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
 private:
-  TimeLine *time_line;
-  GenerationHandler* handler;
+  GenerationHandler* gen_handler;
+  ViewHandler* view_handler;
   Ui::MainWindow ui;
 };
 } // namespace time_line
