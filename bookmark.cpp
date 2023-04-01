@@ -2,11 +2,6 @@
 #include "bookmark.h"
 namespace time_line {
 
-Bookmark::Bookmark(QWidget *parent)
-    : QWidget{parent}
-{
+Bookmark::Bookmark(QWidget *parent) : QWidget{parent} {}
 
-}
-
-}
-
+} // namespace time_line

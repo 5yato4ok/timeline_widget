@@ -1,67 +1,47 @@
 #include "time_line.h"
 #include <QFontMetrics>
+#include <exception>
 namespace time_line {
 
-TimeLine::TimeLine(QMainWindow* parent): QWidget(parent),
-    offset(0)
-{
-    setFixedSize(40, parent->height());
-    move(0, 40);
-    //connect(parent->verticalScrollBar(), &QScrollBar::valueChanged, this, &TimeLine::setOffset);
+TimeLine::TimeLine(QMainWindow *parent) : QWidget(parent) {
+  setFixedHeight(30);
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
-void TimeLine::paintEvent(QPaintEvent* event) {
-    QPainter painter(this);
-    painter.translate(0, -offset);
-    int const heightMM = height() * toMM(painter.device());
-    painter.setFont(font());
+void TimeLine::paintEvent(QPaintEvent *evt) {
+  QPainter painter{this};
+  painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+  QLinearGradient gradient(evt->rect().topLeft(), evt->rect().bottomLeft());
+  gradient.setColorAt(0, palette().window().color());
+  gradient.setColorAt(1, palette().window().color().darker());
+  painter.setBrush(QBrush{gradient});
+  painter.setPen(Qt::NoPen);
+  painter.drawRect(evt->rect());
+  painter.setPen(QPen{palette().buttonText().color(), 2});
+  painter.drawLine(evt->rect().bottomLeft(), evt->rect().bottomRight());
+  painter.setPen(palette().buttonText().color());
+  auto _visualScale = evt->rect().bottomRight().rx()/23;
 
-    QFontMetrics fm(font());
-    for (int position = 0; position < heightMM; ++position)
-    {
-        int const positionInPix = int(position / toMM(painter.device()));
-        if (position % 10 == 0)
-        {
-            if (position != 0)
-            {
-                QString const txt = QString::number(position);
-                QRect txtRect = fm.boundingRect(txt).translated(0, positionInPix);
-                txtRect.translate(0, txtRect.height()/2);
-                painter.drawText(txtRect, txt);
-            }
-            painter.drawLine(width() - 15, positionInPix, width(), positionInPix);
-        }
-        else {
-            painter.drawLine(width() - 10, positionInPix, width(), positionInPix);
-        }
-    }
+  const int last_line = 23;
+  for (int first_line = 0; first_line <= last_line; ++first_line) {
+    QString time_string{prettify(first_line)};
+    painter.drawText(QPointF{first_line * _visualScale -
+                                 painter.fontMetrics()
+                                         .size(Qt::TextSingleLine, time_string)
+                                         .width() /
+                                     2.0,
+                             10},
+                     time_string);
+    painter.drawLine(first_line * _visualScale, 20, first_line * _visualScale,
+                     30);
+  }
+
+  return QWidget::paintEvent(evt);
 }
 
 
-void TimeLine::resizeEvent(QResizeEvent* event)
-{
-    QPainter painter(this);
-    int const maximumMM = event->size().height() * toMM(painter.device());
-    QFontMetrics fm(font());
-    //QString::number(maximumMM))
-    int w = fm.maxWidth() + 20;
-    if (w != event->size().width())
-    {
-        QSize const newSize(w, event->size().height());
-        emit sizeChanged(newSize);
-        return setFixedSize(newSize);
-    }
-    return QWidget::resizeEvent(event);
+QString TimeLine::prettify(int hours) const {
+  QString result{"%1h"};
+  return result.arg(hours, 2, 10);
 }
-
-void TimeLine::setOffset(int value)
-{
-    offset = value;
-    update();
-}
-
-qreal TimeLine::toMM(const QPaintDevice* dev)
-{
-    return 25.4 / dev->logicalDpiX();
-}
-}
+} // namespace time_line

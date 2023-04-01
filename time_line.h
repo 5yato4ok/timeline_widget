@@ -1,31 +1,26 @@
 
 #ifndef TIME_LINE_H
 #define TIME_LINE_H
-#include <QWidget>
-#include <QPainter>
-#include <QScrollBar>
-#include <QMainWindow>
 #include <QAbstractScrollArea>
+#include <QMainWindow>
+#include <QPainter>
 #include <QResizeEvent>
+#include <QScrollBar>
+#include <QWidget>
 
 namespace time_line {
-
-class TimeLine: public QWidget
-{
-    Q_OBJECT
+/**
+ * @brief draws time_stamps on start and on change of window size
+ */
+class TimeLine : public QWidget {
+  Q_OBJECT
 public:
-    TimeLine(QMainWindow* parent=nullptr);
-    virtual void paintEvent(QPaintEvent* event);
-    virtual void resizeEvent(QResizeEvent* event);
+  TimeLine(QMainWindow *parent);
+  virtual void paintEvent(QPaintEvent *event) override;
 
-    void setOffset(int value);
-signals:
-    void sizeChanged(QSize const&);
 private:
-    int offset;
-
-    qreal toMM(const QPaintDevice* dev);
+  QString prettify(int seconds) const;
 };
 
-}
+} // namespace time_line
 #endif // TIME_LINE_H
