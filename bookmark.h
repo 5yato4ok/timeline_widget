@@ -12,8 +12,10 @@ class Bookmark : public QWidget {
   Q_OBJECT
 public:
   explicit Bookmark(QWidget *parent = nullptr);
+    size_t getStart();
 
-signals:
+private:
+  size_t start_pixel;
 };
 } // namespace time_line
 #endif // BOOKMARK_H

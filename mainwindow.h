@@ -9,15 +9,10 @@
 namespace time_line {
 class MainWindow : public QMainWindow {
 public:
-  MainWindow(QWidget *parent = nullptr)
-      : QMainWindow(parent), time_line(new TimeLine(this)) {
-    ui.setupUi(this);
-    ui.time_line_layout->addWidget(time_line);
-  }
-
+    MainWindow(QWidget *parent = nullptr);
 private:
   TimeLine *time_line;
-  GenerationHandler handler;
+  GenerationHandler* handler;
   Ui::MainWindow ui;
 };
 } // namespace time_line

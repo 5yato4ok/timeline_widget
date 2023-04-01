@@ -2,34 +2,17 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
+namespace time_line {
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), time_line(new TimeLine(this)) {
+  ui.setupUi(this);
+  ui.time_line_layout->addWidget(time_line);
+  handler = new GenerationHandler(ui.bkmrs_layout,this);
 
-//MainWindow::MainWindow(QWidget *parent)
-//    : QMainWindow(parent)
-//    , ui(new Ui::MainWindow)
-//{
-//    //setViewportMargins(RULER_BREADTH,RULER_BREADTH,0,0);
-//    QGridLayout* gridLayout = new QGridLayout();
-//    gridLayout->setSpacing(0);
-//    //gridLayout->setMargin(0);
+  QObject::connect(ui.pushButton, &QPushButton::clicked, handler,
+                   &GenerationHandler::startGeneration);
+  QObject::connect(ui.spinBox, &QSpinBox::valueChanged, handler,
+                   &GenerationHandler::setNumOfBkmrs);
+}
 
-//    mHorzRuler = new QDRuler(QDRuler::Horizontal);
-//    mVertRuler = new QDRuler(QDRuler::Vertical);
-
-//    QWidget* fake = new QWidget();
-//    fake->setBackgroundRole(QPalette::Window);
-//    fake->setFixedSize(RULER_BREADTH,RULER_BREADTH);
-//    gridLayout->addWidget(fake,0,0);
-//    gridLayout->addWidget(mHorzRuler,0,1);
-//    gridLayout->addWidget(mVertRuler,1,0);
-//    //gridLayout->addWidget(this->viewport(),1,1);
-
-//    this->setLayout(gridLayout);
-//    //ui->setupUi(this);
-//}
-
-//MainWindow::~MainWindow()
-//{
-//    delete ui;
-//}
-
-
+} // namespace time_line
