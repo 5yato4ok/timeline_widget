@@ -15,8 +15,6 @@ class ViewHandler : public QGraphicsView
 public:
     explicit ViewHandler(QWidget *parent = 0);
     QGraphicsScene      *scene;
-    QPushButton *pushButton;
-    QSpinBox *spinBox;
     TimeLine* time_line;
 
 private:

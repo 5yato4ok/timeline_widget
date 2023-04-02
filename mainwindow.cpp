@@ -11,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent)
   ui.graphicsLayout->addWidget(view_handler);
   gen_handler = new GenerationHandler(nullptr,this);
 
+  QObject::connect(ui.pushButton, &QPushButton::clicked, gen_handler,
+                   &GenerationHandler::startGeneration);
+  QObject::connect(ui.spinBox, &QSpinBox::valueChanged, gen_handler,
+                   &GenerationHandler::setNumOfBkmrs);
 }
 
 } // namespace time_line

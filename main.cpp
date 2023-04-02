@@ -30,9 +30,8 @@ void setupDarkThemePalette() {
 }
 
 int main(int argc, char *argv[]) {
-  using namespace time_line;
   QApplication a(argc, argv);
-  MainWindow w;
+  time_line::MainWindow w;
   setupDarkThemePalette();
   w.show();
   return a.exec();
