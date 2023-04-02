@@ -14,18 +14,13 @@ namespace time_line {
 class Bookmark : public QWidget {
   Q_OBJECT
 public:
-  explicit Bookmark(double start_hour, double duration_hour, size_t idx, QWidget *parent = nullptr);
-  double getStartPos();
-  //virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-  void paint_by_pos(double curScale, int pos_y);
-  void resizeEvent(QResizeEvent *event);
-  protected:
-  virtual bool event(QEvent* evt);
+  explicit Bookmark(double start_hour, double end_hour, int y, QWidget *parent = nullptr);
+  void paintEvent(QPaintEvent *event) override;
 
 private:
   double start_hour;
   double duration_hour;
-  size_t idx;
+  int y_pos;
   QString name;
 };
 } // namespace time_line

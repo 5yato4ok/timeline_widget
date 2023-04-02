@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   view_handler = new ViewHandler(this);
   ui.graphicsLayout->addWidget(view_handler);
-  gen_handler = new GenerationHandler(nullptr,this);
+  gen_handler = new GenerationHandler(this);
 
   QObject::connect(ui.pushButton, &QPushButton::clicked, gen_handler,
                    &GenerationHandler::startGeneration);

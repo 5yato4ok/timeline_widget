@@ -15,7 +15,7 @@ ViewHandler::ViewHandler(QWidget *parent)
     this->setScene(scene);
 
     time_line = new TimeLine(this);
-    time_line->move(0, 50);
+    time_line->move(0, TIME_LINE_POS);
     scene->addWidget(time_line);
 }
 

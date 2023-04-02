@@ -6,43 +6,39 @@
 #include "groupbookmark.h"
 #include "time_line.h"
 #include <QObject>
-#include <QAbstractScrollArea>
-#include <QLayout>
-#include <set>
-#include <unordered_set>
+#include "drawobj.h"
 #include <utility>
 #include <vector>
 
 namespace time_line {
 /**
- * @brief: generate buttons and groups, recalculate them on width resize
- * keeps storage of groups, bookmarks
+ * @brief: generate bookmarks intervals,calculate visible object after grouping
  */
 class GenerationHandler : public  QWidget {
   Q_OBJECT
 public:
-  explicit GenerationHandler(QLayout *layout, QWidget *parent = nullptr);
+  explicit GenerationHandler(QWidget *parent = nullptr);
 public slots:
   void startGeneration();
   void setNumOfBkmrs(size_t num);
+signals:
+  void visibleObjectesGenerated(std::vector<DrawObj>& objs);
 
 private:
-  void clearLayout();
-  void generateBkmrks();
-  void generateGroups();
+  using bkmrks_ordered_by_start = std::vector<std::pair<size_t,size_t>>;
+  using visible_objs_parted = std::vector<std::vector<DrawObj>>;
 
-  static bool compareBkmrksPtr(const std::shared_ptr<Bookmark> &a,
-                               const std::shared_ptr<Bookmark> &b) {
-    return a->getStartPos() < b->getStartPos();
-  }
+  void generateBkmrks();
+  bkmrks_ordered_by_start generateBkmrksPos(int start_hour) const;
+  std::vector<DrawObj> generateVisibleObjs(const bkmrks_ordered_by_start&);
+  void mergeGeneratedParts(const visible_objs_parted &);
+
   const int MAX_CNT_BOOKMARK = 100000000;
-  using bkmrks_ordered_by_start =
-      std::multiset<std::shared_ptr<Bookmark>, decltype(compareBkmrksPtr) *>;
+  const static double MAX_BKMRK_DURATION = 3;
+
   size_t num_of_bkmrs;
-  QLayout* bkmrks_layout;
-  std::vector<QLayout*> layouts_parted;
   std::vector<bkmrks_ordered_by_start> bkmrk_storage_parted;
-  std::vector<std::shared_ptr<GroupBookMark>> group_bkmrk_storage_parted;
+  std::vector<DrawObj> visible_objs;
 };
 } // namespace time_line
 #endif // GENERATIONHANDLER_H
