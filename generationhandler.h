@@ -29,9 +29,10 @@ private:
   using visible_objs_parted = std::vector<std::vector<DrawObj>>;
 
   void generateBkmrks();
-  bkmrks_ordered_by_start generateBkmrksPos(int start_hour) const;
-  std::vector<DrawObj> generateVisibleObjs(const bkmrks_ordered_by_start&);
-  void mergeGeneratedParts(const visible_objs_parted &);
+  void generateBkmrksPos(int start_hour, int last_hour, int count, int thread_store_idx=0) const;
+  std::vector<DrawObj> generateVisibleObjs();
+  std::vector<DrawObj> generateVisibleObjsSingleThread(int thread_store_idx=0);
+  std::vector<DrawObj> mergeGeneratedParts(const visible_objs_parted &);
 
   const int MAX_CNT_BOOKMARK = 100000000;
   const static double MAX_BKMRK_DURATION = 3;
