@@ -31,13 +31,15 @@ private:
   void generateBkmrks();
   void generateBkmrksPos(int start_hour, int last_hour, int count, int thread_store_idx=0) const;
   std::vector<DrawObj> generateVisibleObjs();
-  std::vector<DrawObj> generateVisibleObjsSingleThread(int thread_store_idx=0);
+  std::vector<DrawObj> generateVisibleObjsSingleThread(int thread_store_idx, int start_bkmrk);
   std::vector<DrawObj> mergeGeneratedParts(const visible_objs_parted &);
 
   const int MAX_CNT_BOOKMARK = 100000000;
   const static double MAX_BKMRK_DURATION = 3;
+  const static double MIN_BKMRK_DURATION = 0.1;
 
   size_t num_of_bkmrs;
+  int hour_scale_pixels;
   std::vector<bkmrks_ordered_by_start> bkmrk_storage_parted;
   std::vector<DrawObj> visible_objs;
 };
