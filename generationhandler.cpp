@@ -9,17 +9,19 @@
 namespace time_line {
 using namespace std;
 GenerationHandler::GenerationHandler(QWidget *parent)
-    : QWidget{parent}, num_of_bkmrs(0), hour_scale_pixels(0) {
+    : QWidget{parent}, num_of_bkmrs(0), hour_scale_pixels(0), bkmrks_generated(false) {
     if(parent != nullptr) {
-
+        hour_scale_pixels = devicePixelRatioFScale() * parent->width() / 23;
     }
 }
 void GenerationHandler::startGeneration() {
+  bkmrks_generated = false;
   bkmrk_storage_parted.clear();
   visible_objs.clear();
   if (num_of_bkmrs == 0)
     return;
   generateBkmrks();
+  bkmrks_generated = true;
 }
 
 //is called on each button push
@@ -29,7 +31,6 @@ void GenerationHandler::generateBkmrks() {
   //then merge result
   auto cpuCount = num_of_bkmrs > 100 ? QThread::idealThreadCount() : 1;
   bkmrk_storage_parted.resize(cpuCount);
-
   vector <future <void >> futures;
   const int max_hour = 23;
   const int part_count = num_of_bkmrs / cpuCount;
@@ -74,7 +75,7 @@ void GenerationHandler::generateBkmrksPos (int start_hour, int last_hour,int cou
 
 //is called onbutton push and resize
 void GenerationHandler::generateVisibleObjs() {
-  if (bkmrk_storage_parted.empty())
+  if (bkmrk_storage_parted.empty()|| !bkmrks_generated)
     return;
   visible_objs_parted objs_parted;
   auto cpuCount = num_of_bkmrs > 100 ? QThread::idealThreadCount() : 1;

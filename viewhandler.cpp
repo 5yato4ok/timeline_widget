@@ -17,9 +17,13 @@ ViewHandler::ViewHandler(QWidget *parent)
     time_line = new TimeLine(this);
     time_line->move(0, TIME_LINE_POS);
     scene->addWidget(time_line);
-    emit hourScaleInPixelsCalculated(TimeLine::getHourScale(mapFromScene( view->sceneRect() ).boundingRect()));
+
 }
 
+void ViewHandler::resizeEvent(QResizeEvent *evt) {
+    emit sizeChanged();
+    return QWidget::resizeEvent(evt);
+}
 
 void ViewHandler::drawVisibleObjects(const std::vector<DrawObj>&) {
 

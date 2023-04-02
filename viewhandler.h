@@ -15,16 +15,17 @@ class ViewHandler : public QGraphicsView
     Q_OBJECT
 public:
     explicit ViewHandler(QWidget *parent = 0);
-    QGraphicsScene      *scene;
-    TimeLine* time_line;
+    void resizeEvent(QResizeEvent *event) override;
 public slots:
     void drawVisibleObjects(const std::vector<DrawObj>&);
 signals:
-    void hourScaleInPixelsCalculated(int scale);
+    void sizeChange();
 
 private:
     const size_t TIME_LINE_POS = 50;
     void drawTimeLine();
+    QGraphicsScene      *scene;
+    TimeLine* time_line;
 
 };
 }

@@ -21,6 +21,7 @@ public:
 public slots:
   void startGeneration();
   void setNumOfBkmrs(size_t num);
+  void generateVisibleObjs();
 signals:
   void visibleObjectesGenerated(std::vector<DrawObj>& objs);
 
@@ -30,7 +31,6 @@ private:
 
   void generateBkmrks();
   void generateBkmrksPos(int start_hour, int last_hour, int count, int thread_store_idx=0) const;
-  std::vector<DrawObj> generateVisibleObjs();
   std::vector<DrawObj> generateVisibleObjsSingleThread(int thread_store_idx, int start_bkmrk);
   std::vector<DrawObj> mergeGeneratedParts(const visible_objs_parted &);
 
