@@ -22,7 +22,7 @@ ViewHandler::ViewHandler(QWidget *parent)
     scene = new QGraphicsScene();
     this->setScene(scene);
 
-    time_line = new TimeLine();
+    time_line = new TimeLine(this);
     time_line->move(0, 150);
     scene->addWidget(spinBox);
     scene->addWidget(pushButton);

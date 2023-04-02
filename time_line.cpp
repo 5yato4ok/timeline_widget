@@ -5,11 +5,12 @@ namespace time_line {
 
 TimeLine::TimeLine(QWidget *parent) : QWidget(parent) {
   setFixedHeight(30);
-  setFixedWidth(parent->width());
-  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  //setFixedWidth(parent!=nullptr? parent->width() : 80);
+  //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 void TimeLine::paintEvent(QPaintEvent *evt) {
+  setFixedWidth(parentWidget()->width());
   QPainter painter{this};
   painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
   QLinearGradient gradient(evt->rect().topLeft(), evt->rect().bottomLeft());
