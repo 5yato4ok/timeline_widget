@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QLinearGradient>
 #include <QGraphicsObject>
+#include "drawobj.h"
 
 namespace time_line {
 /**
@@ -14,14 +15,12 @@ namespace time_line {
 class Bookmark : public QWidget {
   Q_OBJECT
 public:
-  explicit Bookmark(double start_hour, double end_hour, size_t idx,int y, double scale, QWidget *parent = nullptr);
+  explicit Bookmark(const DrawWidgetDesc& desc, QWidget *parent = nullptr);
   void paintEvent(QPaintEvent *event) override;
 
 private:
-  double start_hour;
-  double cur_scale;
+  DrawWidgetDesc desc_draw;
   double duration_hour;
-  int y_pos;
   QString name;
 };
 } // namespace time_line

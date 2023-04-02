@@ -30,7 +30,7 @@ private:
   using visible_objs_parted = std::vector<std::vector<DrawObj>>;
 
   void generateBkmrks();
-  void generateBkmrksPos(int start_hour, int last_hour, int count, int thread_store_idx=0);
+  void generateBkmrksPos(double start_hour, double last_hour, int count, int thread_store_idx=0);
   std::vector<DrawObj> generateVisibleObjsSingleThread(int thread_store_idx, int start_bkmrk);
   std::vector<DrawObj> mergeGeneratedParts(const visible_objs_parted &);
 
@@ -43,6 +43,7 @@ private:
   bool bkmrks_generated;
   std::vector<bkmrks_ordered_by_start> bkmrk_storage_parted;
   std::vector<DrawObj> visible_objs;
+  const int approximate_min_scale = 30;
 };
 } // namespace time_line
 #endif // GENERATIONHANDLER_H

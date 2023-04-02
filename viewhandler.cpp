@@ -34,11 +34,12 @@ void ViewHandler::drawVisibleObjects(const std::vector<DrawObj>& objs) {
     auto curScale = TimeLine::getHourScale(rect());
     for(auto& obj: objs) {
         shared_ptr<QWidget> ptr;
+        DrawWidgetDesc desc = {obj.start_hour, obj.end_hour,
+                               obj.bkmrks_idxs,OBJS_POS, curScale};
         if (obj.isGroupObj()) {
-            ptr = make_shared<GroupBookMark>(nullptr);
+            ptr = make_shared<GroupBookMark>(desc, nullptr);
         } else {
-            ptr = make_shared<Bookmark>(obj.start_hour, obj.end_hour,
-                                        obj.bkmrks_idxs.front(),OBJS_POS, curScale, nullptr);
+            ptr = make_shared<Bookmark>(desc, nullptr);
         }
 
         scene->addWidget(ptr.get());

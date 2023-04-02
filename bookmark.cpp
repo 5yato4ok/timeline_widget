@@ -4,23 +4,20 @@
 #include <QMainWindow>
 namespace time_line {
 
-Bookmark::Bookmark( double start, double end, size_t idx,int y, double scale, QWidget *parent)
-    : QWidget{parent}, start_hour(start),
-    duration_hour(abs(end - start)),y_pos(y),
-    cur_scale(scale)
+Bookmark::Bookmark( const DrawWidgetDesc& desc, QWidget *parent)
+    : QWidget{parent}, desc_draw(desc), duration_hour(abs(desc.end_hour - desc.start_hour))
 {
-  name = "Bookmark " + QString::number(idx);
+  name = "Bookmark " + QString::number(desc.idxs.front());
   setFixedHeight(20);
-  auto curScale = TimeLine::getHourScale(window()->rect());
-  setFixedWidth(curScale * duration_hour);
-  move(curScale * start_hour, y_pos);
+  setFixedWidth(desc_draw.scale * duration_hour);
+  move(desc_draw.scale * desc_draw.start_hour, desc_draw.y);
 }
 
 
 void Bookmark::paintEvent(QPaintEvent *event) {
   //auto curScale = TimeLine::getHourScale(window()->geometry());
-  setFixedWidth(cur_scale * duration_hour);
-  move(cur_scale * start_hour, y_pos);
+  setFixedWidth(desc_draw.scale * duration_hour);
+  move(desc_draw.scale * desc_draw.start_hour, desc_draw.y);
 
   QPainter painter{this};
   painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
@@ -34,7 +31,6 @@ void Bookmark::paintEvent(QPaintEvent *event) {
   painter.setPen(QPen{palette().buttonText(), 1});
   QFont font;
   font.setPixelSize(8);
-
 
   QRect text_rect = rect().adjusted(5, 5, -5, -5);
   painter.setFont(font);

@@ -18,6 +18,7 @@ void setupDarkThemePalette() {
   darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
   darkPalette.setColor(QPalette::ButtonText, Qt::white);
   darkPalette.setColor(QPalette::BrightText, Qt::red);
+
   darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
 
   darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));

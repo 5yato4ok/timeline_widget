@@ -3,6 +3,7 @@
 #define DATADESC_H
 #include <vector>
 
+
 namespace time_line {
 class DrawObj{
 public:
@@ -26,5 +27,14 @@ public:
     std::vector<int> bkmrks_idxs;
     int MAX_PIXEL_DIFF = 100;
 };
+
+struct DrawWidgetDesc {
+    double start_hour;
+    double end_hour;
+    std::vector<int> idxs;
+    int y;
+    double scale;
+};
+
 }
 #endif // DATADESC_H
