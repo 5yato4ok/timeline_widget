@@ -10,7 +10,6 @@ TimeLine::TimeLine(QWidget *parent) : QWidget(parent) {
 }
 
 void TimeLine::paintEvent(QPaintEvent *evt) {
-  setFixedWidth(parentWidget()->width());
   QPainter painter{this};
   painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
   QLinearGradient gradient(evt->rect().topLeft(), evt->rect().bottomLeft());

@@ -11,7 +11,7 @@ using namespace std;
 GenerationHandler::GenerationHandler(QWidget *parent)
     : QWidget{parent}, num_of_bkmrs(0), hour_scale_pixels(0), bkmrks_generated(false) {
     if(parent != nullptr) {
-        hour_scale_pixels = devicePixelRatioFScale() * parent->width() / 23;
+        hour_scale_pixels = devicePixelRatioFScale() * parent->rect().bottomRight().rx() / 23;
     }
 }
 void GenerationHandler::startGeneration() {
@@ -22,6 +22,7 @@ void GenerationHandler::startGeneration() {
     return;
   generateBkmrks();
   bkmrks_generated = true;
+  generateVisibleObjs();
 }
 
 //is called on each button push
@@ -31,23 +32,23 @@ void GenerationHandler::generateBkmrks() {
   //then merge result
   auto cpuCount = num_of_bkmrs > 100 ? QThread::idealThreadCount() : 1;
   bkmrk_storage_parted.resize(cpuCount);
-  vector <future <void >> futures;
+  vector <future <void>> futures;
   const int max_hour = 23;
   const int part_count = num_of_bkmrs / cpuCount;
   for (size_t i = 0; i < cpuCount; i++) {
     double start_hour = i * max_hour / cpuCount;
     double end_hour = i+1 < cpuCount ? ((i+1) * max_hour / cpuCount): max_hour;
     int count = i+1 < cpuCount ? part_count : num_of_bkmrs - i * part_count;
-    futures.push_back([this,&start_hour,&end_hour,&count,&i]{
+    futures.push_back(async(std::launch::async,[this,start_hour,end_hour,count,i]{
         generateBkmrksPos(start_hour,end_hour,count,i);
-    });
+    }));
   }
 }
 
 vector<DrawObj> GenerationHandler::mergeGeneratedParts(const visible_objs_parted &parts) {
   if (parts.size()==1) return parts.front();
   vector<DrawObj> res = parts.front();
-  for(int i = 1; i < parts.size();i==) {
+  for(int i = 1; i < parts.size();i++) {
     auto& curMergePart = parts.at(i);
     auto it_beg =  curMergePart.begin();
     if (res.back().intersects(curMergePart.front(), hour_scale_pixels)) {
@@ -55,7 +56,7 @@ vector<DrawObj> GenerationHandler::mergeGeneratedParts(const visible_objs_parted
         res.back().end_hour = curMergePart.front().end_hour;
         it_beg = next(it_beg);
     }
-    res.back().insert(res.end(), it_beg,curMergePart.end());
+    res.insert(res.end(), it_beg,curMergePart.end());
   }
   return res;
 }
@@ -80,12 +81,12 @@ void GenerationHandler::generateVisibleObjs() {
   visible_objs_parted objs_parted;
   auto cpuCount = num_of_bkmrs > 100 ? QThread::idealThreadCount() : 1;
 
-  vector <future <void >> futures;
+  vector <future <vector<DrawObj>>> futures;
   for (size_t i = 0; i < cpuCount; i++) {
-    futures.push_back([this,&i]{
+    futures.push_back(async(std::launch::async,[this,i]{
         int start_bkmrk = i > 0 ? bkmrk_storage_parted[i-1].size() : 1;
-        generateVisibleObjsSingleThread(i,start_bkmrk);
-    });
+        return generateVisibleObjsSingleThread(i,start_bkmrk);
+    }));
   }
 
   for(auto& f: futures) {
@@ -110,6 +111,7 @@ vector<DrawObj> GenerationHandler::generateVisibleObjsSingleThread(int thread_st
         cur_group.end_hour = cur_thread_store.at(i).second;
     } else {
         res.push_back(cur_group);
+        cur_group = DrawObj(cur_thread_store.at(i).first,cur_thread_store.at(i).second, {i});
     }
   }
   res.push_back(cur_group);

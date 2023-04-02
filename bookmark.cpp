@@ -1,27 +1,26 @@
 
 #include "bookmark.h"
 #include "time_line.h"
+#include <QMainWindow>
 namespace time_line {
 
-Bookmark::Bookmark( double start, double end, size_t pos, int y, QWidget *parent)
-    : QWidget{parent}, start_hour(start), duration_hour(abs(end - start)) {
-  name = "Bookmark " + QString::number(pos);
-  setMinimumHeight(20);
-//  setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-}
-
-//void Bookmark::paint_by_pos(double curScale, int pos_y)
-//{
-//    setFixedWidth(curScale * duration_hour);
-//    move(curScale * start_hour, pos_y);
-//    repaint();
-//}
-
-void Bookmark::paintEvent(QPaintEvent *event) {
-  if (parentWidget() == nullptr) return;
-  auto curScale = TimeLine::getHourScale(parentWidget()->rect());
+Bookmark::Bookmark( double start, double end, size_t idx,int y, double scale, QWidget *parent)
+    : QWidget{parent}, start_hour(start),
+    duration_hour(abs(end - start)),y_pos(y),
+    cur_scale(scale)
+{
+  name = "Bookmark " + QString::number(idx);
+  setFixedHeight(20);
+  auto curScale = TimeLine::getHourScale(window()->rect());
   setFixedWidth(curScale * duration_hour);
   move(curScale * start_hour, y_pos);
+}
+
+
+void Bookmark::paintEvent(QPaintEvent *event) {
+  //auto curScale = TimeLine::getHourScale(window()->geometry());
+  setFixedWidth(cur_scale * duration_hour);
+  move(cur_scale * start_hour, y_pos);
 
   QPainter painter{this};
   painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);

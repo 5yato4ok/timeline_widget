@@ -4,12 +4,14 @@
 
 #include <QGraphicsView>
 #include <QPushButton>
+#include <QGraphicsItemGroup>
 #include <QSpinBox>
 #include "time_line.h"
 #include "drawobj.h"
 #include "bookmark.h"
 #include "groupbookmark.h"
 #include <utility>
+#include <unordered_set>
 
 namespace time_line {
 class ViewHandler : public QGraphicsView
@@ -25,11 +27,12 @@ signals:
 
 private:
     void clearVisibleWidgets();
-    std::vector<std::shared_pointer<QWidget>> visible_widgets;
+    std::unordered_map<QObject*, std::shared_ptr<QWidget>> visible_widgets;
     const size_t TIME_LINE_POS = 50;
-    const size_t OBJS_POS = TIME_LINE_POS + 10;
+    const size_t OBJS_POS = TIME_LINE_POS + 30;
     void drawTimeLine();
     QGraphicsScene      *scene;
+    QGraphicsItemGroup *bkmrk_group;
     TimeLine* time_line;
 
 };
