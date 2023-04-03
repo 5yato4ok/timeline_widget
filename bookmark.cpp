@@ -4,7 +4,7 @@
 #include <QMainWindow>
 namespace time_line {
 
-Bookmark::Bookmark( const DrawWidgetDesc& desc, QWidget *parent)
+Bookmark::Bookmark( const TimeLineItem& desc, QWidget *parent)
     : DrawElementWidget(desc,parent){}
 
 QString Bookmark::getDescription() {
@@ -12,7 +12,7 @@ QString Bookmark::getDescription() {
 }
 
 QString Bookmark::getName() {
-  return "Bookmark " + QString::number(desc_draw.idxs.front());
+  return "Bookmark " + QString::number(desc_draw.bkmrks_idxs.front());
 }
 
 QPalette Bookmark::getPalette() {

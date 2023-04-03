@@ -30,13 +30,13 @@ void ViewHandler::resizeEvent(QResizeEvent *evt) {
     return QWidget::resizeEvent(evt);
 }
 
-void ViewHandler::drawVisibleObjects(const std::vector<DrawObj>& objs) {
+void ViewHandler::drawVisibleObjects(const std::vector<TimeLineItem>& objs) {
     clearVisibleWidgets();
     int cur_group_count = 0;
     auto curScale = TimeLine::getHourScale(rect());
     for(auto& obj: objs) {
         std::shared_ptr<QWidget> ptr;
-        DrawWidgetDesc desc = {obj.start_hour, obj.end_hour,
+        TimeLineItem desc = {obj.start_sec, obj.end_sec,
                                obj.bkmrks_idxs,OBJS_POS, curScale};
         if (obj.isGroupObj()) {
             ptr = std::make_shared<GroupBookMark>(desc, nullptr);

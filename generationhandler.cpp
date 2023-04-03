@@ -55,28 +55,28 @@ void GenerationHandler::generateBkmrks() {
   auto cpuCount = num_of_bkmrs > 100 ? QThread::idealThreadCount() : 1;
   bkmrk_storage_parted.resize(cpuCount);
   vector <future <void>> futures;
-  const int max_hour = 23;
+  const int max_sec = 23*60*60;
   const int part_count = num_of_bkmrs / cpuCount;
   for (size_t i = 0; i < cpuCount; i++) {
-    double start_hour = i * max_hour / cpuCount;
-    double end_hour = i+1 < cpuCount ? ((i+1) * max_hour / cpuCount): max_hour;
+    int start_sec = i * max_sec / cpuCount;
+    int end_sec = i+1 < cpuCount ? ((i+1) * max_sec / cpuCount): max_sec;
     int count = i+1 < cpuCount ? part_count : num_of_bkmrs - i * part_count;
     bkmrk_storage_parted[i].reserve(count);
-    futures.push_back(async(std::launch::async,[this,start_hour,end_hour,count,i]{
-        generateBkmrksPos(start_hour,end_hour,count,i);
+    futures.push_back(async(std::launch::async,[this,start_sec,end_sec,count,i]{
+        generateBkmrksPos(start_sec,end_sec,count,i);
     }));
   }
 }
 
-vector<DrawObj> GenerationHandler::mergeGeneratedParts(const VisibleObjsParted &parts) {
+vector<TimeLineItem> GenerationHandler::mergeGeneratedParts(const VisibleObjsParted &parts) {
   if (parts.size()==1) return parts.front();
-  vector<DrawObj> res = parts.front();
+  vector<TimeLineItem> res = parts.front();
   for(int i = 1; i < parts.size();i++) {
     auto& curMergePart = parts.at(i);
     auto it_beg =  curMergePart.begin();
     if (res.back().intersects(curMergePart.front(), hour_scale_pixels)) {
         res.back().bkmrks_idxs.insert(res.back().bkmrks_idxs.end(),curMergePart.front().bkmrks_idxs.begin(),curMergePart.front().bkmrks_idxs.end());
-        res.back().end_hour = curMergePart.front().end_hour;
+        res.back().end_sec = curMergePart.front().end_sec;
         it_beg = next(it_beg);
     }
     res.insert(res.end(), it_beg,curMergePart.end());
@@ -84,21 +84,17 @@ vector<DrawObj> GenerationHandler::mergeGeneratedParts(const VisibleObjsParted &
   return res;
 }
 
-void GenerationHandler::generateBkmrksPos (double start_hour, double last_hour,int count, int thread_store_idx){
+void GenerationHandler::generateBkmrksPos (int start_sec, int last_sec,int count, int thread_store_idx){
   random_device rd;
   mt19937 gen(rd());
-  uniform_real_distribution<> start_distr(start_hour, last_hour);
-  uniform_real_distribution<> diff_distr(0, MAX_BKMRK_DURATION);
+  uniform_int_distribution<> start_distr(start_sec, last_sec);
+  uniform_int_distribution<> diff_distr(0, MAX_BKMRK_DURATION);
   auto& cur_thread_store = bkmrk_storage_parted.at(thread_store_idx);
-  //LOG_DURATION("generation of nums") {
   for(int n=0; n<count; ++n) {
     auto start = start_distr(gen);
     cur_thread_store.push_back({start, start+diff_distr(gen)});
   }
-  //}
-  //LOG_DURATION("sorting of nums") {
   sort(cur_thread_store.begin(), cur_thread_store.end());
-  //}
 }
 
 //is called onbutton push and resize
@@ -108,7 +104,7 @@ void GenerationHandler::generateVisibleObjs(const PartedStorageOfBkmrks& bkmrk_s
   }
   VisibleObjsParted objs_parted;
   auto cpuCount = bkmrk_storage_parted.size();
-  vector <future <vector<DrawObj>>> futures;
+  vector <future <vector<TimeLineItem>>> futures;
   int start_bkmrk = 0;
   for (size_t i = 0; i < cpuCount; i++) {
     if (i>0) {
@@ -127,18 +123,18 @@ void GenerationHandler::generateVisibleObjs(const PartedStorageOfBkmrks& bkmrk_s
 }
 
 
-vector<DrawObj> GenerationHandler::generateVisibleObjsSingleThread(const BkmrksOrderedByStart& bkmrks, int start_bkmrk) {
+vector<TimeLineItem> GenerationHandler::generateVisibleObjsSingleThread(const BkmrksOrderedByStart& bkmrks, int start_bkmrk) {
   if (bkmrks.empty()) return {};
-  DrawObj cur_group( bkmrks.front(), {start_bkmrk+1});
-  vector<DrawObj> res;
+  TimeLineItem cur_group( bkmrks.front(), {start_bkmrk+1});
+  vector<TimeLineItem> res;
   for(int i = 1; i < bkmrks.size();i++) {
     int bkmrk_idx = start_bkmrk + i + 1;
     if(cur_group.intersects(bkmrks.at(i), hour_scale_pixels)) {
         cur_group.bkmrks_idxs.push_back(bkmrk_idx);
-        cur_group.end_hour = bkmrks.at(i).second;
+        cur_group.end_sec = bkmrks.at(i).second;
     } else {
         res.push_back(cur_group);
-        cur_group = DrawObj(bkmrks.at(i).first,bkmrks.at(i).second, {bkmrk_idx});
+        cur_group = TimeLineItem(bkmrks.at(i).first,bkmrks.at(i).second, {bkmrk_idx});
     }
   }
   res.push_back(cur_group);

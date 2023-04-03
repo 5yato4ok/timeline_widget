@@ -6,7 +6,7 @@
 #include "groupbookmark.h"
 #include "time_line.h"
 #include <QObject>
-#include "drawobj.h"
+#include "timelineitem.h"
 #include <utility>
 #include <vector>
 #include <mutex>
@@ -25,22 +25,22 @@ public slots:
   void generateVisibleObjs(const PartedStorageOfBkmrks& bkmrk_storage_parted);
   void moveCache(PartedStorageOfBkmrks& dest);
 signals:
-  void visibleObjectesGenerated(const std::vector<DrawObj>& objs);
+  void visibleObjectesGenerated(const std::vector<TimeLineItem>& objs);
   void generationStatusChanged(bool);
   void bkmrksGenerated();
 
 private:
-  using VisibleObjsParted = std::vector<std::vector<DrawObj>>;
+  using VisibleObjsParted = std::vector<std::vector<TimeLineItem>>;
 
   void generateBkmrks();
-  void generateBkmrksPos(double start_hour, double last_hour, int count, int thread_store_idx=0);
-  std::vector<DrawObj> generateVisibleObjsSingleThread(const BkmrksOrderedByStart& bkmrks, int start_bkmrk);
-  std::vector<DrawObj> mergeGeneratedParts(const VisibleObjsParted &);
+  void generateBkmrksPos(int start_sec, int last_sec, int count, int thread_store_idx=0);
+  std::vector<TimeLineItem> generateVisibleObjsSingleThread(const BkmrksOrderedByStart& bkmrks, int start_bkmrk);
+  std::vector<TimeLineItem> mergeGeneratedParts(const VisibleObjsParted &);
   bool isLaunchedLauncherThread();
 
   const int MAX_CNT_BOOKMARK = 100000000;
-  const double MAX_BKMRK_DURATION = 3;
-  const double MIN_BKMRK_DURATION = 0.1;
+  const int MAX_BKMRK_DURATION = 3*60*60;
+  const int MIN_BKMRK_DURATION = 6*60;
 
   size_t num_of_bkmrs;
   int hour_scale_pixels;

@@ -7,7 +7,7 @@
 #include <QGraphicsItemGroup>
 #include <QSpinBox>
 #include "time_line.h"
-#include "drawobj.h"
+#include "timelineitem.h"
 #include "bookmark.h"
 #include "groupbookmark.h"
 #include <utility>
@@ -21,7 +21,7 @@ public:
     explicit ViewHandler(QWidget *parent = 0);
     void resizeEvent(QResizeEvent *event) override;
 public slots:
-    void drawVisibleObjects(const std::vector<DrawObj>&);
+    void drawVisibleObjects(const std::vector<TimeLineItem>&);
     void cacheBkmrks();
 signals:
     void recalcVisibleObjectRequired(const PartedStorageOfBkmrks&);

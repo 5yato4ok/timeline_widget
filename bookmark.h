@@ -15,7 +15,7 @@ namespace time_line {
 class Bookmark : public DrawElementWidget {
   Q_OBJECT
 public:
-  explicit Bookmark(const DrawWidgetDesc& desc, QWidget *parent = nullptr);
+  explicit Bookmark(const TimeLineItem& desc, QWidget *parent = nullptr);
 protected:
     QString getDescription() override;
     QString getName() override;

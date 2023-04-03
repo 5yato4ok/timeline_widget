@@ -13,7 +13,7 @@ namespace time_line {
 class GroupBookMark : public DrawElementWidget {
   Q_OBJECT
 public:
-  explicit GroupBookMark(const DrawWidgetDesc& desc, QWidget *parent = nullptr);
+  explicit GroupBookMark(const TimeLineItem& desc, QWidget *parent = nullptr);
 protected:
   QString getDescription() override;
   QString getName() override;
