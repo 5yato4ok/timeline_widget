@@ -15,6 +15,8 @@ file(GLOB SOURCES
      "*.cpp"
 )
 
+add_compile_options(-pthread -lpthread)
+
 SET( PROJECT_SOURCES ${SOURCES})
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

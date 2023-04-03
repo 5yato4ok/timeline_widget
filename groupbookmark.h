@@ -3,22 +3,21 @@
 #define GROUPBOOKMARK_H
 
 #include <QWidget>
-#include "drawobj.h"
+#include "drawelementwidget.h"
 #include <vector>
 
 namespace time_line {
 /**
  * @brief draws one group of bookmarks
  */
-class GroupBookMark : public QWidget {
+class GroupBookMark : public DrawElementWidget {
   Q_OBJECT
 public:
   explicit GroupBookMark(const DrawWidgetDesc& desc, QWidget *parent = nullptr);
-  void paintEvent(QPaintEvent *event) override;
-private:
-  DrawWidgetDesc desc_draw;
-  double duration_hour;
-  QString name;
+protected:
+  QString generateDescription() override;
+  QString getName() override;
+  QPalette getPalette() override;
 };
 } // namespace time_line
 

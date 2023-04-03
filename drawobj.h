@@ -5,6 +5,9 @@
 
 
 namespace time_line {
+using BkmrksOrderedByStart = std::vector<std::pair<double,double>>;
+using PartedStorageOfBkmrks = std::vector<BkmrksOrderedByStart>;
+
 class DrawObj{
 public:
     DrawObj() = default;

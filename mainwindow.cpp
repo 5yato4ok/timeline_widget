@@ -16,10 +16,17 @@ MainWindow::MainWindow(QWidget *parent)
   QObject::connect(ui.spinBox, &QSpinBox::valueChanged, gen_handler,
                    &GenerationHandler::setNumOfBkmrs);
 
-  QObject::connect(view_handler, &ViewHandler::sizeChanged, gen_handler,
+  QObject::connect(gen_handler, &GenerationHandler::bkmrksGenerated, view_handler,
+                   &ViewHandler::cacheBkmrks);
+
+  QObject::connect(view_handler, &ViewHandler::recalcVisibleObjectRequired, gen_handler,
                    &GenerationHandler::generateVisibleObjs);
+//  QObject::connect(view_handler, &ViewHandler::generationStatusRequied, gen_handler,
+//                   &GenerationHandler::checkGenerationStatus);
+
   QObject::connect(gen_handler, &GenerationHandler::visibleObjectesGenerated, view_handler,
                    &ViewHandler::drawVisibleObjects);
+
 }
 
 } // namespace time_line

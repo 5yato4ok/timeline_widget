@@ -1,9 +1,10 @@
 
 #include "viewhandler.h"
 #include <QGraphicsProxyWidget>
+#include <utility>
 
 namespace time_line {
-using namespace std;
+
 ViewHandler::ViewHandler(QWidget *parent)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -22,9 +23,17 @@ ViewHandler::ViewHandler(QWidget *parent)
 
 }
 
+bool ViewHandler::event(QEvent * evt){
+    if(is_generated_bkmrks){
+        emit generationStatusRequied();
+    }
+    return QGraphicsView::event(evt);
+}
+
 void ViewHandler::resizeEvent(QResizeEvent *evt) {
     time_line->setFixedWidth(width());
-    emit sizeChanged();
+    if(!cached_bkmrks.empty())
+        emit recalcVisibleObjectRequired(cached_bkmrks);
     return QWidget::resizeEvent(evt);
 }
 
@@ -33,19 +42,27 @@ void ViewHandler::drawVisibleObjects(const std::vector<DrawObj>& objs) {
     int cur_group_count = 0;
     auto curScale = TimeLine::getHourScale(rect());
     for(auto& obj: objs) {
-        shared_ptr<QWidget> ptr;
+        std::shared_ptr<QWidget> ptr;
         DrawWidgetDesc desc = {obj.start_hour, obj.end_hour,
                                obj.bkmrks_idxs,OBJS_POS, curScale};
         if (obj.isGroupObj()) {
-            ptr = make_shared<GroupBookMark>(desc, nullptr);
+            ptr = std::make_shared<GroupBookMark>(desc, nullptr);
         } else {
-            ptr = make_shared<Bookmark>(desc, nullptr);
+            ptr = std::make_shared<Bookmark>(desc, nullptr);
         }
 
         scene->addWidget(ptr.get());
         visible_widgets[ptr.get()] = ptr;
     }
     scene->update();
+}
+
+void ViewHandler::cacheBkmrks(const PartedStorageOfBkmrks & storage)
+{
+    m.lock();
+    cached_bkmrks = storage;
+    m.unlock();
+    emit recalcVisibleObjectRequired(cached_bkmrks);
 }
 
 void ViewHandler::clearVisibleWidgets() {

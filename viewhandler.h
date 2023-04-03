@@ -11,7 +11,7 @@
 #include "bookmark.h"
 #include "groupbookmark.h"
 #include <utility>
-#include <unordered_set>
+#include <mutex>
 
 namespace time_line {
 class ViewHandler : public QGraphicsView
@@ -20,10 +20,14 @@ class ViewHandler : public QGraphicsView
 public:
     explicit ViewHandler(QWidget *parent = 0);
     void resizeEvent(QResizeEvent *event) override;
+    bool event(QEvent * e) override;
 public slots:
     void drawVisibleObjects(const std::vector<DrawObj>&);
+    void cacheBkmrks(const PartedStorageOfBkmrks&);
+    //void setGenerationStatus(bool);
 signals:
-    void sizeChanged();
+    void recalcVisibleObjectRequired(const PartedStorageOfBkmrks&);
+    void generationStatusRequied();
 
 private:
     void clearVisibleWidgets();
@@ -34,6 +38,9 @@ private:
     QGraphicsScene      *scene;
     QGraphicsItemGroup *bkmrk_group;
     TimeLine* time_line;
+    bool is_generated_bkmrks;
+    PartedStorageOfBkmrks cached_bkmrks;
+    std::mutex m;
 
 };
 }

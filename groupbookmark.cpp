@@ -1,42 +1,31 @@
 
 #include "groupbookmark.h"
 #include <QPainter>
+#include <QEvent>
 
 namespace time_line {
 
 GroupBookMark::GroupBookMark(const DrawWidgetDesc& desc, QWidget *parent)
-    : QWidget{parent}, desc_draw(desc),duration_hour(abs(desc.end_hour - desc.start_hour)) {
-    name = QString::number(desc.idxs.size());
-    setFixedHeight(20);
-    setFixedWidth(desc_draw.scale * duration_hour);
-    move(desc_draw.scale * desc_draw.start_hour, desc_draw.y);
+    : DrawElementWidget(desc,parent){}
+
+QString GroupBookMark::generateDescription() {
+    QString res;
+    auto last_bkmrk = std::min(desc_draw.idxs.size(),size_t(15));
+    for(int i = 0; i < last_bkmrk;i++){
+        res+="Bookmark "+QString::number(desc_draw.idxs[i])+"\n";
+    }
+    return res;
 }
 
-void GroupBookMark::paintEvent(QPaintEvent *event) {
-    setFixedWidth(desc_draw.scale * duration_hour);
-    move(desc_draw.scale * desc_draw.start_hour, desc_draw.y);
+QString GroupBookMark::getName() {
+    return QString::number(desc_draw.idxs.size());
+}
 
-    QPainter painter{this};
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
-    QLinearGradient bg_gradient(rect().topLeft(), rect().bottomLeft());
+QPalette GroupBookMark::getPalette() {
     QPalette lightPalete = palette();
     lightPalete.setColor(QPalette::Text, Qt::white);
     lightPalete.setColor(QPalette::Button, QColor(255, 87, 51));
-    bg_gradient.setColorAt(0, lightPalete.button().color().lighter());
-    bg_gradient.setColorAt(1, lightPalete.button().color());
-    painter.setBrush(QBrush{bg_gradient});
-    painter.setPen(QPen{lightPalete.buttonText(), 1});
-    painter.drawRoundedRect(rect(), 5, 5);
-    painter.setBrush(Qt::NoBrush);
-    painter.setPen(QPen{lightPalete.buttonText(), 1});
-    QFont font;
-    font.setPixelSize(8);
-
-    QRect text_rect = rect().adjusted(5, 5, -5, -5);
-    painter.setFont(font);
-    painter.drawText(text_rect, Qt::AlignCenter,
-                     painter.fontMetrics().elidedText(
-                         name, Qt::TextElideMode::ElideRight, text_rect.width()));
-    QWidget::paintEvent(event);
+    return lightPalete;
 }
+
 } // namespace time_line
