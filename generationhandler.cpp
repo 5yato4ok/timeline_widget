@@ -22,6 +22,11 @@ bool GenerationHandler::isLaunchedLauncherThread() {
     return true;
 }
 
+void GenerationHandler::moveCache(PartedStorageOfBkmrks& dest) {
+    lock_guard<mutex> lock(m);
+    dest = std::move(bkmrk_storage_parted);
+}
+
 void GenerationHandler::startGeneration() {
     if(isLaunchedLauncherThread()) {
         return; //for now ignore generation of two different sets of bkmrks in parallel
@@ -35,8 +40,7 @@ void GenerationHandler::startGeneration() {
         if (num_of_bkmrs == 0)
             return;
         generateBkmrks();
-        emit bkmrksGenerated(bkmrk_storage_parted);
-        bkmrk_storage_parted.clear();
+        emit bkmrksGenerated();
         emit generationStatusChanged(false);
     });
 

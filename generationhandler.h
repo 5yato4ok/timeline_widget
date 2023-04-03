@@ -23,10 +23,11 @@ public slots:
   void startGeneration();
   void setNumOfBkmrs(size_t num);
   void generateVisibleObjs(const PartedStorageOfBkmrks& bkmrk_storage_parted);
+  void moveCache(PartedStorageOfBkmrks& dest);
 signals:
   void visibleObjectesGenerated(const std::vector<DrawObj>& objs);
   void generationStatusChanged(bool);
-  void bkmrksGenerated(const PartedStorageOfBkmrks& objs);
+  void bkmrksGenerated();
 
 private:
   using VisibleObjsParted = std::vector<std::vector<DrawObj>>;

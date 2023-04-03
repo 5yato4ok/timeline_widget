@@ -39,6 +39,9 @@ MainWindow::MainWindow(QWidget *parent)
   QObject::connect(gen_handler, &GenerationHandler::bkmrksGenerated, view_handler,
                    &ViewHandler::cacheBkmrks);
 
+  QObject::connect(view_handler, &ViewHandler::cacheRequested, gen_handler,
+                   &GenerationHandler::moveCache);
+
   QObject::connect(view_handler, &ViewHandler::recalcVisibleObjectRequired, gen_handler,
                    &GenerationHandler::generateVisibleObjs);
 

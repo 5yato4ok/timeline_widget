@@ -20,25 +20,21 @@ class ViewHandler : public QGraphicsView
 public:
     explicit ViewHandler(QWidget *parent = 0);
     void resizeEvent(QResizeEvent *event) override;
-    bool event(QEvent * e) override;
 public slots:
     void drawVisibleObjects(const std::vector<DrawObj>&);
-    void cacheBkmrks(const PartedStorageOfBkmrks&);
-    //void setGenerationStatus(bool);
+    void cacheBkmrks();
 signals:
     void recalcVisibleObjectRequired(const PartedStorageOfBkmrks&);
-    void generationStatusRequied();
+    void cacheRequested(PartedStorageOfBkmrks&);
 
 private:
     void clearVisibleWidgets();
     std::unordered_map<QObject*, std::shared_ptr<QWidget>> visible_widgets;
     const int TIME_LINE_POS = 30;
     const int OBJS_POS = TIME_LINE_POS + 30;
-    void drawTimeLine();
     QGraphicsScene      *scene;
     QGraphicsItemGroup *bkmrk_group;
     TimeLine* time_line;
-    bool is_generated_bkmrks;
     PartedStorageOfBkmrks cached_bkmrks;
     std::mutex m;
 

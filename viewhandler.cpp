@@ -23,13 +23,6 @@ ViewHandler::ViewHandler(QWidget *parent)
 
 }
 
-bool ViewHandler::event(QEvent * evt){
-    if(is_generated_bkmrks){
-        emit generationStatusRequied();
-    }
-    return QGraphicsView::event(evt);
-}
-
 void ViewHandler::resizeEvent(QResizeEvent *evt) {
     time_line->setFixedWidth(width());
     if(!cached_bkmrks.empty())
@@ -56,11 +49,10 @@ void ViewHandler::drawVisibleObjects(const std::vector<DrawObj>& objs) {
     }
     scene->update();
 }
-
-void ViewHandler::cacheBkmrks(const PartedStorageOfBkmrks & storage)
-{
+void ViewHandler::cacheBkmrks() {
     m.lock();
-    cached_bkmrks = storage;
+    cached_bkmrks.clear();
+    emit cacheRequested(cached_bkmrks);
     m.unlock();
     emit recalcVisibleObjectRequired(cached_bkmrks);
 }
