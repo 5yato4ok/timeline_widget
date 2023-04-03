@@ -2,6 +2,7 @@
 #ifndef TIMELINEITEM_H
 #define TIMELINEITEM_H
 #include <vector>
+#include <cmath>
 
 namespace time_line {
 using BkmrksOrderedByStart = std::vector<std::pair<int, int>>;
@@ -22,7 +23,7 @@ public:
   bool isGroupObj() const { return bkmrks_idxs.size() > 1; }
 
   bool intersects(const std::pair<int, int> &b, int hour_scale_pixels) const {
-    double diff_in_hour = (abs(b.first - start_sec) / (60 * 60));
+    double diff_in_hour = (std::abs(b.first - start_sec) / (60 * 60));
     return diff_in_hour * hour_scale_pixels <= MAX_PIXEL_DIFF;
   }
 
