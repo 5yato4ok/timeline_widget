@@ -13,11 +13,14 @@ public:
     DrawObj() = default;
     DrawObj(double start, double end, const std::vector<int> &idxs) :
         start_hour(start),end_hour(end),bkmrks_idxs(idxs){}
+    DrawObj(const std::pair<double,double>& range, const std::vector<int> &idxs):DrawObj(range.first, range.second, idxs) {
+    }
     bool isGroupObj() const {
         return bkmrks_idxs.size() > 1;
     }
 
     bool intersects(const std::pair<double,double>& b, size_t hour_scale_pixels) const {
+        auto diff = abs(b.first - start_hour) * hour_scale_pixels;
         return abs(b.first - start_hour) * hour_scale_pixels <= MAX_PIXEL_DIFF;
     }
 

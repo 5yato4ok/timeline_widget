@@ -8,11 +8,15 @@ namespace time_line {
 GroupBookMark::GroupBookMark(const DrawWidgetDesc& desc, QWidget *parent)
     : DrawElementWidget(desc,parent){}
 
-QString GroupBookMark::generateDescription() {
+QString GroupBookMark::getDescription() {
     QString res;
-    auto last_bkmrk = std::min(desc_draw.idxs.size(),size_t(15));
-    for(int i = 0; i < last_bkmrk;i++){
+    auto last_bkmrk = desc_draw.idxs.size()>15? 15: desc_draw.idxs.size();
+    int i = 0;
+    for(i = 0; i < last_bkmrk;i++){
         res+="Bookmark "+QString::number(desc_draw.idxs[i])+"\n";
+    }
+    if (i < desc_draw.idxs.size()) {
+        res+="+ "+QString::number(desc_draw.idxs.size() - i)+" other bookmarks";
     }
     return res;
 }

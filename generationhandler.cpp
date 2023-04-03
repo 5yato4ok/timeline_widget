@@ -105,9 +105,12 @@ void GenerationHandler::generateVisibleObjs(const PartedStorageOfBkmrks& bkmrk_s
   VisibleObjsParted objs_parted;
   auto cpuCount = bkmrk_storage_parted.size();
   vector <future <vector<DrawObj>>> futures;
+  int start_bkmrk = 0;
   for (size_t i = 0; i < cpuCount; i++) {
-    futures.push_back(async(std::launch::async,[this,i,&bkmrk_storage_parted]{
-        int start_bkmrk = i > 0 ? bkmrk_storage_parted.at(i-1).size() : 1;
+    if (i>0) {
+        start_bkmrk += bkmrk_storage_parted.at(i-1).size();
+    }
+    futures.push_back(async(std::launch::async,[this,i,&bkmrk_storage_parted, start_bkmrk]{
         return generateVisibleObjsSingleThread(bkmrk_storage_parted.at(i), start_bkmrk);
     }));
   }
@@ -122,15 +125,16 @@ void GenerationHandler::generateVisibleObjs(const PartedStorageOfBkmrks& bkmrk_s
 
 vector<DrawObj> GenerationHandler::generateVisibleObjsSingleThread(const BkmrksOrderedByStart& bkmrks, int start_bkmrk) {
   if (bkmrks.empty()) return {};
-  DrawObj cur_group( bkmrks.front().first, bkmrks.front().second,{1});
+  DrawObj cur_group( bkmrks.front(), {start_bkmrk+1});
   vector<DrawObj> res;
   for(int i = 1; i < bkmrks.size();i++) {
+    int bkmrk_idx = start_bkmrk + i + 1;
     if(cur_group.intersects(bkmrks.at(i), hour_scale_pixels)) {
-        cur_group.bkmrks_idxs.push_back(start_bkmrk + i + 1);
+        cur_group.bkmrks_idxs.push_back(bkmrk_idx);
         cur_group.end_hour = bkmrks.at(i).second;
     } else {
         res.push_back(cur_group);
-        cur_group = DrawObj(bkmrks.at(i).first,bkmrks.at(i).second, {i});
+        cur_group = DrawObj(bkmrks.at(i).first,bkmrks.at(i).second, {bkmrk_idx});
     }
   }
   res.push_back(cur_group);

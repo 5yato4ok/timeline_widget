@@ -15,7 +15,7 @@ class GroupBookMark : public DrawElementWidget {
 public:
   explicit GroupBookMark(const DrawWidgetDesc& desc, QWidget *parent = nullptr);
 protected:
-  QString generateDescription() override;
+  QString getDescription() override;
   QString getName() override;
   QPalette getPalette() override;
 };

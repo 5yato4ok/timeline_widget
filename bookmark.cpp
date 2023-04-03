@@ -7,7 +7,7 @@ namespace time_line {
 Bookmark::Bookmark( const DrawWidgetDesc& desc, QWidget *parent)
     : DrawElementWidget(desc,parent){}
 
-QString Bookmark::generateDescription() {
+QString Bookmark::getDescription() {
   return getName();
 }
 
