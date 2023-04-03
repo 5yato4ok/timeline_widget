@@ -15,7 +15,7 @@ void setupDarkThemePalette() {
   darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
   darkPalette.setColor(QPalette::ToolTipText, Qt::white);
   darkPalette.setColor(QPalette::Text, Qt::white);
-  darkPalette.setColor(QPalette::Button,QColor(88, 24, 69));
+  darkPalette.setColor(QPalette::Button, QColor(88, 24, 69));
   darkPalette.setColor(QPalette::ButtonText, Qt::white);
   darkPalette.setColor(QPalette::BrightText, Qt::red);
 
@@ -26,12 +26,11 @@ void setupDarkThemePalette() {
 
   qApp->setPalette(darkPalette);
 
-  qApp->setStyleSheet(
-      "QToolTip { color: #ffffff; background-color: #900C3F; "
+  qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #900C3F; "
                       "border: 1px solid #581845; }"
-      "QPushButton:disabled {background-color:#353535;}"
+                      "QPushButton:disabled {background-color:#353535;}"
 
-      );
+  );
 }
 
 int main(int argc, char *argv[]) {

@@ -5,8 +5,6 @@ namespace time_line {
 
 TimeLine::TimeLine(QWidget *parent) : QWidget(parent) {
   setFixedHeight(30);
-  //setFixedWidth(parent!=nullptr? parent->width() : 80);
-  //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 void TimeLine::paintEvent(QPaintEvent *evt) {

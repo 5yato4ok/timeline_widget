@@ -2,11 +2,11 @@
 #ifndef BOOKMARK_H
 #define BOOKMARK_H
 
-#include <QWidget>
-#include <QPainter>
-#include <QLinearGradient>
-#include <QGraphicsObject>
 #include "drawelementwidget.h"
+#include <QGraphicsObject>
+#include <QLinearGradient>
+#include <QPainter>
+#include <QWidget>
 
 namespace time_line {
 /**
@@ -15,11 +15,12 @@ namespace time_line {
 class Bookmark : public DrawElementWidget {
   Q_OBJECT
 public:
-  explicit Bookmark(const TimeLineItem& desc, QWidget *parent = nullptr);
+  explicit Bookmark(const TimeLineItem &desc, QWidget *parent = nullptr);
+
 protected:
-    QString getDescription() override;
-    QString getName() override;
-    QPalette getPalette() override;
+  QString getDescription() override;
+  QString getName() override;
+  QPalette getPalette() override;
 };
 } // namespace time_line
 #endif // BOOKMARK_H

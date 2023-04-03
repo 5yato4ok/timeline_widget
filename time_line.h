@@ -10,16 +10,17 @@
 
 namespace time_line {
 /**
- * @brief draws time_stamps on start and on change of window size
+ * @brief draws time_stamps of timeline on start and on change of window size
  */
 class TimeLine : public QWidget {
   Q_OBJECT
 public:
-  TimeLine(QWidget *parent=nullptr);
+  TimeLine(QWidget *parent = nullptr);
   virtual void paintEvent(QPaintEvent *event) override;
-  static double getHourScale(const QRect& rect) {
+  static double getHourScale(const QRect &rect) {
     return rect.bottomRight().rx() / 23;
   }
+
 private:
   QString prettify(int seconds) const;
 };
