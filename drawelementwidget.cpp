@@ -30,11 +30,7 @@ void DrawElementWidget::paintEvent(QPaintEvent *event) {
 
     QPainter painter{this};
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
-    QLinearGradient bg_gradient(rect().topLeft(), rect().bottomLeft());
-
-    bg_gradient.setColorAt(0, usedPallete.button().color().lighter());
-    bg_gradient.setColorAt(1, usedPallete.button().color());
-    painter.setBrush(QBrush{bg_gradient});
+    painter.setBrush(usedPallete.button().color());
     painter.setPen(QPen{usedPallete.buttonText(), 1});
     painter.drawRoundedRect(rect(), 5, 5);
     painter.setBrush(Qt::NoBrush);

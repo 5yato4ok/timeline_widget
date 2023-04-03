@@ -11,6 +11,8 @@ namespace time_line {
 class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
+public slots:
+    void setGenerationButtonStatus(bool status);
 private:
   GenerationHandler* gen_handler;
   ViewHandler* view_handler;

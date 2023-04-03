@@ -65,6 +65,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
+        <property name="toolTip">
+         <string extracomment="Push to start new generation of bookmarks"/>
+        </property>
         <property name="text">
          <string>Generate bookmarks</string>
         </property>

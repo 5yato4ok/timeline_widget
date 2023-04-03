@@ -3,9 +3,17 @@
 #include "./ui_mainwindow.h"
 
 namespace time_line {
+
+void MainWindow::setGenerationButtonStatus(bool status) {
+    ui.pushButton->setDisabled(status);
+    ui.pushButton->setToolTip(status ? "Processing generation of bookmarks":
+                                  "Push to start new generation of bookmarks");
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
   ui.setupUi(this);
+  ui.pushButton->setToolTip("Push to start new generation of bookmarks");
 
   view_handler = new ViewHandler(this);
   ui.graphicsLayout->addWidget(view_handler);
@@ -21,8 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
 
   QObject::connect(view_handler, &ViewHandler::recalcVisibleObjectRequired, gen_handler,
                    &GenerationHandler::generateVisibleObjs);
-//  QObject::connect(view_handler, &ViewHandler::generationStatusRequied, gen_handler,
-//                   &GenerationHandler::checkGenerationStatus);
+  QObject::connect(gen_handler, &GenerationHandler::generationStatusChanged, this,
+                   &MainWindow::setGenerationButtonStatus);
 
   QObject::connect(gen_handler, &GenerationHandler::visibleObjectesGenerated, view_handler,
                    &ViewHandler::drawVisibleObjects);

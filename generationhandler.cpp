@@ -29,6 +29,7 @@ void GenerationHandler::startGeneration() {
 
     std::thread launcher([&]{
         lock_guard<mutex> lock(m);
+        emit generationStatusChanged(true);
         bkmrk_storage_parted.clear();
         hour_scale_pixels = parentWidget() ? parentWidget()->width() / 23: approximate_min_scale;
         if (num_of_bkmrs == 0)
@@ -36,6 +37,7 @@ void GenerationHandler::startGeneration() {
         generateBkmrks();
         emit bkmrksGenerated(bkmrk_storage_parted);
         bkmrk_storage_parted.clear();
+        emit generationStatusChanged(false);
     });
 
     launcher.detach();
