@@ -10,7 +10,7 @@
 namespace time_line {
 using namespace std;
 GenerationHandler::GenerationHandler(QWidget *parent)
-    : QWidget{parent}, num_of_bkmrs(0), hour_scale_pixels(0) {}
+    : QWidget{parent}, num_of_bkmrs(0) {}
 
 bool GenerationHandler::isLaunchedLauncherThread() {
   if (m.try_lock()) {
@@ -35,8 +35,6 @@ void GenerationHandler::startGeneration() {
     lock_guard<mutex> lock(m);
     emit generationStatusChanged(true);
     bkmrk_storage_parted.clear();
-    hour_scale_pixels =
-        parentWidget() ? parentWidget()->width() / 23 : approximate_min_scale;
     if (num_of_bkmrs == 0)
       return;
     generateBkmrks();
@@ -66,7 +64,7 @@ void GenerationHandler::generateBkmrks() {
 }
 
 vector<TimeLineItem>
-GenerationHandler::mergeGeneratedParts(const VisibleObjsParted &parts) {
+GenerationHandler::mergeGeneratedParts(const VisibleObjsParted &parts, double hour_scale_pixels) {
   if (parts.size() == 1)
     return parts.front();
   vector<TimeLineItem> res = parts.front();
@@ -109,14 +107,16 @@ void GenerationHandler::generateVisibleObjs(
   auto cpuCount = bkmrk_storage_parted.size();
   vector<future<vector<TimeLineItem>>> futures;
   int start_bkmrk = 0;
+  double hour_scale_pixels =
+      parentWidget() ? parentWidget()->width() / 23 : approximate_min_scale;
   for (size_t i = 0; i < cpuCount; i++) {
     if (i > 0) {
       start_bkmrk += bkmrk_storage_parted.at(i - 1).size();
     }
     futures.push_back(async(std::launch::async,
-                            [this, i, &bkmrk_storage_parted, start_bkmrk] {
+                            [this, i, &bkmrk_storage_parted, start_bkmrk,hour_scale_pixels] {
                               return generateVisibleObjsSingleThread(
-                                  bkmrk_storage_parted.at(i), start_bkmrk);
+                                  bkmrk_storage_parted.at(i), start_bkmrk,hour_scale_pixels);
                             }));
   }
 
@@ -124,11 +124,11 @@ void GenerationHandler::generateVisibleObjs(
     objs_parted.push_back(f.get());
   }
 
-  emit visibleObjectesGenerated(mergeGeneratedParts(objs_parted));
+  emit visibleObjectesGenerated(mergeGeneratedParts(objs_parted, hour_scale_pixels));
 }
 
 vector<TimeLineItem> GenerationHandler::generateVisibleObjsSingleThread(
-    const BkmrksOrderedByStart &bkmrks, int start_bkmrk) {
+    const BkmrksOrderedByStart &bkmrks, int start_bkmrk, double hour_scale_pixels) {
   if (bkmrks.empty())
     return {};
   TimeLineItem cur_group(bkmrks.front(), {start_bkmrk + 1});

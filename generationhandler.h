@@ -42,8 +42,9 @@ private:
                          int thread_store_idx = 0);
   std::vector<TimeLineItem>
   generateVisibleObjsSingleThread(const BkmrksOrderedByStart &bkmrks,
-                                  int start_bkmrk);
-  std::vector<TimeLineItem> mergeGeneratedParts(const VisibleObjsParted &);
+                                  int start_bkmrk, double hour_scale);
+  std::vector<TimeLineItem> mergeGeneratedParts(const VisibleObjsParted & objs_to_merge,
+                                                double hour_scale_pixels);
   bool isLaunchedLauncherThread();
 
   const int MAX_CNT_BOOKMARK = 100000000;
@@ -51,7 +52,6 @@ private:
   const int MIN_BKMRK_DURATION = 6 * 60;
 
   size_t num_of_bkmrs;
-  int hour_scale_pixels;
   PartedStorageOfBkmrks bkmrk_storage_parted;
   const int approximate_min_scale = 30;
   std::mutex m;
