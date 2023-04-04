@@ -33,9 +33,8 @@ void GenerationHandler::startGeneration() {
     try {
         generateBkmrks();
     } catch(...) {
-        store_mutex.lock();
+        std::lock_guard<mutex> lock(store_mutex);
         bkmrk_storage_parted.clear();
-        store_mutex.unlock();
         emit generationStatusChanged(false);
         throw;
     }
