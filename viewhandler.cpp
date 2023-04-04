@@ -23,14 +23,12 @@ ViewHandler::ViewHandler(QWidget *parent) {
 
 void ViewHandler::resizeEvent(QResizeEvent *evt) {
   time_line->setFixedWidth(width());
-  if (!cached_bkmrks.empty())
-    emit recalcVisibleObjectRequired(cached_bkmrks);
+  emit recalcVisibleObjectRequired();
   return QWidget::resizeEvent(evt);
 }
 
-void ViewHandler::drawVisibleObjects(const std::vector<TimeLineItem> &objs) {
+void ViewHandler::drawVisibleObjects(const VisibleObjs &objs) {
   clearVisibleWidgets();
-  int cur_group_count = 0;
   auto curScale = TimeLine::getHourScale(rect());
   for (auto &obj : objs) {
     std::shared_ptr<QWidget> ptr;
@@ -46,13 +44,6 @@ void ViewHandler::drawVisibleObjects(const std::vector<TimeLineItem> &objs) {
     visible_widgets[ptr.get()] = ptr;
   }
   scene->update();
-}
-void ViewHandler::cacheBkmrks() {
-  m.lock();
-  cached_bkmrks.clear();
-  emit cacheRequested(cached_bkmrks);
-  m.unlock();
-  emit recalcVisibleObjectRequired(cached_bkmrks);
 }
 
 void ViewHandler::clearVisibleWidgets() {

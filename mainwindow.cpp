@@ -39,19 +39,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   QObject::connect(ui_dialog.spinBox, &QSpinBox::valueChanged, gen_handler,
                    &GenerationHandler::setNumOfBkmrs);
 
-  QObject::connect(gen_handler, &GenerationHandler::bkmrksGenerated,
-                   view_handler, &ViewHandler::cacheBkmrks);
-
-  QObject::connect(view_handler, &ViewHandler::cacheRequested, gen_handler,
-                   &GenerationHandler::moveCache);
-
   QObject::connect(view_handler, &ViewHandler::recalcVisibleObjectRequired,
                    gen_handler, &GenerationHandler::generateVisibleObjs);
 
   QObject::connect(gen_handler, &GenerationHandler::generationStatusChanged,
                    this, &MainWindow::setGenerationButtonStatus);
 
-  QObject::connect(gen_handler, &GenerationHandler::visibleObjectesGenerated,
+  QObject::connect(gen_handler, &GenerationHandler::visibleObjsGenerated,
                    view_handler, &ViewHandler::drawVisibleObjects);
 }
 

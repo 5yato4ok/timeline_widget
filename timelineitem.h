@@ -1,13 +1,10 @@
 
 #ifndef TIMELINEITEM_H
 #define TIMELINEITEM_H
-#include <vector>
 #include <cmath>
+#include <vector>
 
 namespace time_line {
-using BkmrksOrderedByStart = std::vector<std::pair<int, int>>;
-using PartedStorageOfBkmrks = std::vector<BkmrksOrderedByStart>;
-
 /**
  * @brief describes one item on timeline
  */
@@ -38,6 +35,9 @@ public:
   double hour_scale;
   int MAX_PIXEL_DIFF = 100;
 };
+
+using VisibleObjs = std::vector<TimeLineItem>;
+using VisibleObjsParted = std::vector<VisibleObjs>;
 
 } // namespace time_line
 #endif // TIMELINEITEM_H

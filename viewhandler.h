@@ -15,8 +15,7 @@
 
 namespace time_line {
 /**
- * @brief controls gui representation of generated data,
- * stores generated data for recalculation on events
+ * @brief controls gui representation of generated data
  */
 class ViewHandler : public QGraphicsView {
   Q_OBJECT
@@ -24,11 +23,9 @@ public:
   explicit ViewHandler(QWidget *parent = 0);
   void resizeEvent(QResizeEvent *event) override;
 public slots:
-  void drawVisibleObjects(const std::vector<TimeLineItem> &);
-  void cacheBkmrks();
+  void drawVisibleObjects(const VisibleObjs &);
 signals:
-  void recalcVisibleObjectRequired(const PartedStorageOfBkmrks &);
-  void cacheRequested(PartedStorageOfBkmrks &);
+  void recalcVisibleObjectRequired();
 
 private:
   void clearVisibleWidgets();
@@ -38,8 +35,6 @@ private:
   QGraphicsScene *scene;
   QGraphicsItemGroup *bkmrk_group;
   TimeLine *time_line;
-  PartedStorageOfBkmrks cached_bkmrks;
-  std::mutex m;
 };
 } // namespace time_line
 #endif // VIEWHANDLER_H
