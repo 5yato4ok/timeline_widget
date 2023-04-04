@@ -31,12 +31,12 @@ void GenerationHandler::startGeneration() {
       return;
     emit generationStatusChanged(true);
     try {
-        generateBkmrks();
-    } catch(...) {
-        std::lock_guard<mutex> lock(store_mutex);
-        bkmrk_storage_parted.clear();
-        emit generationStatusChanged(false);
-        throw;
+      generateBkmrks();
+    } catch (...) {
+      std::lock_guard<mutex> lock(store_mutex);
+      bkmrk_storage_parted.clear();
+      emit generationStatusChanged(false);
+      throw;
     }
     emit generationStatusChanged(false);
     generateVisibleObjs();
@@ -66,9 +66,11 @@ void GenerationHandler::generateBkmrks() {
   for (auto &f : futures) {
     f.get();
   }
-  store_mutex.lock();
-  bkmrk_storage_parted = std::move(bkmrks_parted);
-  store_mutex.unlock();
+
+  {
+    std::lock_guard<mutex> lock(store_mutex);
+    bkmrk_storage_parted = std::move(bkmrks_parted);
+  }
 }
 
 VisibleObjs
