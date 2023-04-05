@@ -6,6 +6,7 @@
 #include <future>
 #include <random>
 #include <thread>
+#include "time_line.h"
 
 namespace time_line {
 GenerationHandler::GenerationHandler(QWidget *parent)
@@ -120,16 +121,16 @@ void GenerationHandler::generateVisibleObjs() {
     auto cpuCount = bkmrk_storage_parted.size();
     std::vector<std::future<VisibleObjs>> futures;
     int start_bkmrk = 0;
-    double hour_scale_pixels =
-        parentWidget() ? parentWidget()->width() / 23 : approximate_min_scale;
+    double sec_per_pixels = parentWidget() ? TimeLine::getSecPerPixel(TimeLine::getSecScale(parentWidget()->rect())) :
+                                approximate_min_scale;
     for (size_t i = 0; i < cpuCount; i++) {
       if (i > 0) {
         start_bkmrk += bkmrk_storage_parted.at(i - 1).size();
       }
       futures.push_back(
-          async(std::launch::async, [this, i, start_bkmrk, hour_scale_pixels] {
+          async(std::launch::async, [this, i, start_bkmrk, sec_per_pixels] {
             return generateVisibleObjsSingleThread(
-                bkmrk_storage_parted.at(i), start_bkmrk, hour_scale_pixels);
+                bkmrk_storage_parted.at(i), start_bkmrk, sec_per_pixels);
           }));
     }
 
@@ -138,21 +139,21 @@ void GenerationHandler::generateVisibleObjs() {
     }
 
     emit visibleObjsGenerated(
-        mergeVisibleObjsParts(objs_parted, hour_scale_pixels));
+        mergeVisibleObjsParts(objs_parted, sec_per_pixels));
   });
   launcher.detach();
 }
 
 vector<TimeLineItem> GenerationHandler::generateVisibleObjsSingleThread(
     const BkmrksOrderedByStart &bkmrks, int start_bkmrk,
-    double hour_scale_pixels) {
+    double sec_per_pixel) {
   if (bkmrks.empty())
     return {};
   TimeLineItem cur_group(bkmrks.front(), {start_bkmrk + 1});
   VisibleObjs res;
   for (int i = 1; i < bkmrks.size(); i++) {
     int bkmrk_idx = start_bkmrk + i + 1;
-    if (cur_group.intersects(bkmrks.at(i), hour_scale_pixels)) {
+    if (cur_group.intersects(bkmrks.at(i), sec_per_pixel)) {
       cur_group.bkmrks_idxs.push_back(bkmrk_idx);
       cur_group.end_sec = bkmrks.at(i).second;
     } else {

@@ -19,13 +19,12 @@ public:
       : TimeLineItem(range.first, range.second, idxs) {}
   bool isGroupObj() const { return bkmrks_idxs.size() > 1; }
 
-  bool intersects(const std::pair<int, int> &b, int hour_scale_pixels) const {
-    double diff_in_hour = (std::abs(b.first - start_sec) / (60 * 60));
-    return diff_in_hour * hour_scale_pixels <= MAX_PIXEL_DIFF;
+  bool intersects(const std::pair<int, int> &b, int sec_per_pixel) const {
+      return std::abs(b.first - start_sec)  <= (MAX_PIXEL_DIFF * sec_per_pixel);
   }
 
-  bool intersects(const TimeLineItem &b, int hour_scale_pixels) const {
-    return intersects({b.start_sec, b.end_sec}, hour_scale_pixels);
+  bool intersects(const TimeLineItem &b, int sec_per_pixel) const {
+    return intersects({b.start_sec, b.end_sec}, sec_per_pixel);
   }
 
   int start_sec;

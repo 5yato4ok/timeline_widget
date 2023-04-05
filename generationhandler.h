@@ -48,11 +48,11 @@ private:
 
   const int MAX_CNT_BOOKMARK = 100000000;
   const int MAX_BKMRK_DURATION = 3 * 60 * 60;
-  const int MIN_BKMRK_DURATION = 6 * 60;
+  const int MIN_BKMRK_DURATION = 1 * 60;
 
   size_t num_of_bkmrs;
   PartedStorageOfBkmrks bkmrk_storage_parted;
-  const int approximate_min_scale = 30;
+  const double approximate_min_scale = 30/60/60;
   std::mutex gen_mutex;
   std::mutex store_mutex;
 };

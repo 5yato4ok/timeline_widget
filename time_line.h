@@ -25,6 +25,10 @@ public:
     return double(rect.bottomRight().rx()) / 23 / 60 / 60;
   }
 
+  static int getSecPerPixel(double sec_scale) {
+    return 1 / sec_scale;
+  }
+
 private:
   QString prettify(int seconds) const;
 };
