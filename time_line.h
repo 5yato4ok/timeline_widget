@@ -21,6 +21,10 @@ public:
     return rect.bottomRight().rx() / 23;
   }
 
+  static double getSecScale(const QRect &rect) {
+    return double(rect.bottomRight().rx()) / 23 / 60 / 60;
+  }
+
 private:
   QString prettify(int seconds) const;
 };

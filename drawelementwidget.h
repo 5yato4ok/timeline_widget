@@ -24,7 +24,8 @@ protected:
   virtual QPalette getPalette() = 0;
 
   TimeLineItem desc_draw;
-  double duration_hour;
+  int duration_sec;
+  int sec_per_pixel;
   QWidget *widgetDesc;
 };
 } // namespace time_line

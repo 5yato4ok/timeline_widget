@@ -29,7 +29,7 @@ void ViewHandler::resizeEvent(QResizeEvent *evt) {
 
 void ViewHandler::drawVisibleObjects(const VisibleObjs &objs) {
   clearVisibleWidgets();
-  auto curScale = TimeLine::getHourScale(rect());
+  auto curScale = TimeLine::getSecScale(rect());
   for (auto &obj : objs) {
     std::shared_ptr<QWidget> ptr;
     TimeLineItem desc = {obj.start_sec, obj.end_sec, obj.bkmrks_idxs, OBJS_POS,

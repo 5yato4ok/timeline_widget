@@ -14,7 +14,7 @@ public:
   TimeLineItem(int start, int end, const std::vector<int> &idxs, int p_y = 0,
                double scale = 0)
       : start_sec(start), end_sec(end), bkmrks_idxs(idxs), y(p_y),
-        hour_scale(scale) {}
+      sec_scale(scale) {}
   TimeLineItem(const std::pair<int, int> &range, const std::vector<int> &idxs)
       : TimeLineItem(range.first, range.second, idxs) {}
   bool isGroupObj() const { return bkmrks_idxs.size() > 1; }
@@ -32,7 +32,7 @@ public:
   int end_sec;
   std::vector<int> bkmrks_idxs;
   int y;
-  double hour_scale;
+  double sec_scale;
   int MAX_PIXEL_DIFF = 100;
 };
 

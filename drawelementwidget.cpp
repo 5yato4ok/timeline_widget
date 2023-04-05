@@ -7,10 +7,11 @@ namespace time_line {
 
 DrawElementWidget::DrawElementWidget(const TimeLineItem& desc, QWidget *parent)
     : QWidget{parent}, desc_draw(desc) {
-    duration_hour = abs(desc.end_sec - desc.start_sec)/60/60;
+    sec_per_pixel = 1 / desc_draw.sec_scale;
+    duration_sec = abs(desc.end_sec - desc.start_sec);
     setFixedHeight(20);
-    setFixedWidth(desc_draw.hour_scale * duration_hour);
-    move(desc_draw.hour_scale * (desc_draw.start_sec/60/60), desc_draw.y);
+    setFixedWidth(std::max(duration_sec/sec_per_pixel,1));
+    move(desc_draw.start_sec/sec_per_pixel, desc_draw.y);
 
     setAttribute(Qt::WA_Hover);
 }
