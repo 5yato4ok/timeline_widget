@@ -30,7 +30,7 @@ signals:
 private:
   void clearVisibleWidgets();
   std::unordered_map<QObject *, std::shared_ptr<QWidget>> visible_widgets;
-  const int TIME_LINE_POS = 30;
+  const int TIME_LINE_POS = 10;
   const int OBJS_POS = TIME_LINE_POS + 30;
   QGraphicsScene *scene;
   QGraphicsItemGroup *bkmrk_group;

@@ -13,22 +13,22 @@ public:
   TimeLineItem() = default;
   TimeLineItem(int start, int end, const std::vector<int> &idxs, int p_y = 0,
                double scale = 0)
-      : start_sec(start), end_sec(end), bkmrks_idxs(idxs), y(p_y),
+      : start_millisec(start), end_millisec(end), bkmrks_idxs(idxs), y(p_y),
       sec_scale(scale) {}
   TimeLineItem(const std::pair<int, int> &range, const std::vector<int> &idxs)
       : TimeLineItem(range.first, range.second, idxs) {}
   bool isGroupObj() const { return bkmrks_idxs.size() > 1; }
 
   bool intersects(const std::pair<int, int> &b, int sec_per_pixel) const {
-      return std::abs(b.first - start_sec)  <= (MAX_PIXEL_DIFF * sec_per_pixel);
+      return std::abs(b.first - start_millisec)  <= (MAX_PIXEL_DIFF * sec_per_pixel);
   }
 
   bool intersects(const TimeLineItem &b, int sec_per_pixel) const {
-    return intersects({b.start_sec, b.end_sec}, sec_per_pixel);
+      return intersects({b.start_millisec, b.end_millisec}, sec_per_pixel);
   }
 
-  int start_sec;
-  int end_sec;
+  int start_millisec;
+  int end_millisec;
   std::vector<int> bkmrks_idxs;
   int y;
   double sec_scale;

@@ -22,6 +22,7 @@ ViewHandler::ViewHandler(QWidget *parent) {
 }
 
 void ViewHandler::resizeEvent(QResizeEvent *evt) {
+  time_line->move(0, TIME_LINE_POS);
   time_line->setFixedWidth(width());
   emit recalcVisibleObjectRequired();
   return QWidget::resizeEvent(evt);
@@ -29,10 +30,10 @@ void ViewHandler::resizeEvent(QResizeEvent *evt) {
 
 void ViewHandler::drawVisibleObjects(const VisibleObjs &objs) {
   clearVisibleWidgets();
-  auto curScale = TimeLine::getSecScale(rect());
+  auto curScale = TimeLine::getMilliSecScale(rect());
   for (auto &obj : objs) {
     std::shared_ptr<QWidget> ptr;
-    TimeLineItem desc = {obj.start_sec, obj.end_sec, obj.bkmrks_idxs, OBJS_POS,
+      TimeLineItem desc = {obj.start_sec, obj.end_millisec, obj.bkmrks_idxs, OBJS_POS,
                          curScale};
     if (obj.isGroupObj()) {
       ptr = std::make_shared<GroupBookMark>(desc, nullptr);

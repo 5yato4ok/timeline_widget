@@ -21,13 +21,11 @@ public:
     return rect.bottomRight().rx() / 23;
   }
 
-  static double getSecScale(const QRect &rect) {
-    return double(rect.bottomRight().rx()) / 23 / 60 / 60;
+  static double getMilliSecScale(const QRect &rect) {
+    return double(rect.bottomRight().rx()) / 23 / 60 / 60 / 60;
   }
 
-  static int getSecPerPixel(double sec_scale) {
-    return 1 / sec_scale;
-  }
+  static int getMilliSecPerPixel(double scale) { return 1 / scale; }
 
 private:
   QString prettify(int seconds) const;

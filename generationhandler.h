@@ -37,22 +37,21 @@ signals:
 
 private:
   void generateBkmrks();
-  void generateBkmrksSingleThread(int start_sec, int last_sec, int count,
+  void generateBkmrksSingleThread(int start_millisec, int last_millisec, int count,
                                   BkmrksOrderedByStart &dst);
   VisibleObjs
   generateVisibleObjsSingleThread(const BkmrksOrderedByStart &bkmrks,
-                                  int start_bkmrk, double hour_scale);
-  VisibleObjs mergeVisibleObjsParts(const VisibleObjsParted &objs_to_merge,
-                                    double hour_scale_pixels);
+                                  int start_bkmrk, double scale);
+  VisibleObjs mergeVisibleObjsParts(const VisibleObjsParted &objs_to_merge, double scale);
   bool isProcessingGeneration();
 
   const int MAX_CNT_BOOKMARK = 100000000;
-  const int MAX_BKMRK_DURATION = 3 * 60 * 60;
+  const int MAX_BKMRK_DURATION = 3 * 60 * 60 * 60;
   const int MIN_BKMRK_DURATION = 1 * 60;
 
   size_t num_of_bkmrs;
   PartedStorageOfBkmrks bkmrk_storage_parted;
-  const double approximate_min_scale = 30/60/60;
+  const double approximate_min_scale = 30/60/60/60;
   std::mutex gen_mutex;
   std::mutex store_mutex;
 };
