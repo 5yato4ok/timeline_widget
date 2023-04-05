@@ -33,7 +33,7 @@ void ViewHandler::drawVisibleObjects(const VisibleObjs &objs) {
   auto curScale = TimeLine::getMilliSecScale(rect());
   for (auto &obj : objs) {
     std::shared_ptr<QWidget> ptr;
-      TimeLineItem desc = {obj.start_sec, obj.end_millisec, obj.bkmrks_idxs, OBJS_POS,
+      TimeLineItem desc = {obj.start_millisec, obj.end_millisec, obj.bkmrks_idxs, OBJS_POS,
                          curScale};
     if (obj.isGroupObj()) {
       ptr = std::make_shared<GroupBookMark>(desc, nullptr);
