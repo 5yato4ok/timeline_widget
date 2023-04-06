@@ -11,11 +11,11 @@ ViewHandler::ViewHandler(QWidget *parent): QGraphicsView(parent),
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setStyleSheet("background: transparent");
   setAlignment(Qt::AlignCenter);
-  this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  this->setMinimumHeight(100);
-  this->setMinimumWidth(100);
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  setMinimumHeight(100);
+  setMinimumWidth(100);
   scene = new QGraphicsScene(this);
-  this->setScene(scene);
+  setScene(scene);
 
   time_line.move(0, TIME_LINE_POS);
   scene->addWidget(&time_line);
