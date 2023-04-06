@@ -17,8 +17,6 @@ public:
   explicit DrawElementWidget(const TimeLineItem &desc,
                              QWidget *parent = nullptr);
   void paintEvent(QPaintEvent *event) override;
-
-protected:
   virtual QString getDescription() = 0;
   virtual QString getName() = 0;
   virtual QPalette getPalette() = 0;
@@ -26,7 +24,6 @@ protected:
   TimeLineItem desc_draw;
   int duration_sec;
   int sec_per_pixel;
-  QWidget *widgetDesc;
 };
 } // namespace time_line
 #endif // DRAWELEMENTWIDGET_H

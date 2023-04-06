@@ -14,7 +14,6 @@ class GroupBookMark : public DrawElementWidget {
   Q_OBJECT
 public:
   explicit GroupBookMark(const TimeLineItem& desc, QWidget *parent = nullptr);
-protected:
   QString getDescription() override;
   QString getName() override;
   QPalette getPalette() override;

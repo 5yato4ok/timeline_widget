@@ -16,8 +16,6 @@ class Bookmark : public DrawElementWidget {
   Q_OBJECT
 public:
   explicit Bookmark(const TimeLineItem &desc, QWidget *parent = nullptr);
-
-protected:
   QString getDescription() override;
   QString getName() override;
   QPalette getPalette() override;

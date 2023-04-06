@@ -20,8 +20,10 @@ namespace time_line {
 class ViewHandler : public QGraphicsView {
   Q_OBJECT
 public:
+  using VisibleWidgetsStorage = std::unordered_map<QObject *, std::shared_ptr<QWidget>>;
   explicit ViewHandler(QWidget *parent = 0);
   void resizeEvent(QResizeEvent *event) override;
+  VisibleWidgetsStorage get_visible_widgets();
 public slots:
   void drawVisibleObjects(const VisibleObjs &);
 signals:
@@ -29,7 +31,7 @@ signals:
 
 private:
   void clearVisibleWidgets();
-  std::unordered_map<QObject *, std::shared_ptr<QWidget>> visible_widgets;
+  VisibleWidgetsStorage visible_widgets;
   const int TIME_LINE_POS = 0;
   const int OBJS_POS = TIME_LINE_POS + 30;
   QGraphicsScene *scene;

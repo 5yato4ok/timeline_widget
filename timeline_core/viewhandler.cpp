@@ -28,6 +28,10 @@ void ViewHandler::resizeEvent(QResizeEvent *evt) {
   return QWidget::resizeEvent(evt);
 }
 
+ViewHandler::VisibleWidgetsStorage ViewHandler::get_visible_widgets() {
+  return visible_widgets;
+}
+
 void ViewHandler::drawVisibleObjects(const VisibleObjs &objs) {
   clearVisibleWidgets();
   auto curScale = TimeLine::getMilliSecScale(rect());

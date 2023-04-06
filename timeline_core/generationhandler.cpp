@@ -122,7 +122,7 @@ void GenerationHandler::generateVisibleObjs() {
     std::vector<std::future<VisibleObjs>> futures;
     int start_bkmrk = 0;
     double millisec_per_pixels =
-        parentWidget() ? TimeLine::getMilliSecPerPixel(
+        parent() && parentWidget() ? TimeLine::getMilliSecPerPixel(
                              TimeLine::getMilliSecScale(parentWidget()->rect()))
                        : approximate_min_scale;
     for (size_t i = 0; i < cpuCount; i++) {
