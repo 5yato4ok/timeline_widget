@@ -22,7 +22,7 @@ bool GenerationHandler::isProcessingGeneration() {
 
 void GenerationHandler::startGeneration() {
   if (isProcessingGeneration()) {
-    return; // for now ignore generation of two different sets of bkmrks in
+    return; // ignore generation of two different sets of bkmrks in
             // parallel
   }
 
@@ -109,7 +109,7 @@ void GenerationHandler::generateBkmrksSingleThread(
   sort(cur_thread_store.begin(), cur_thread_store.end());
 }
 
-// is called onbutton push and resize
+// is called on button push and resize
 void GenerationHandler::generateVisibleObjs() {
   std::thread launcher([&] {
     std::lock_guard<mutex> lock(store_mutex);

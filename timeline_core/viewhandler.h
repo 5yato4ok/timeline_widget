@@ -32,11 +32,10 @@ signals:
 private:
   void clearVisibleWidgets();
   VisibleWidgetsStorage visible_widgets;
-  const int TIME_LINE_POS = 0;
+  const int TIME_LINE_POS = 10;
   const int OBJS_POS = TIME_LINE_POS + 30;
   QGraphicsScene *scene;
-  QGraphicsItemGroup *bkmrk_group;
-  TimeLine *time_line;
+  TimeLine time_line;
 };
 } // namespace time_line
 #endif // VIEWHANDLER_H

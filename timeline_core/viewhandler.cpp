@@ -5,7 +5,8 @@
 
 namespace time_line {
 
-ViewHandler::ViewHandler(QWidget *parent) {
+ViewHandler::ViewHandler(QWidget *parent): QGraphicsView(parent),
+    time_line(nullptr) {
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setStyleSheet("background: transparent");
@@ -16,14 +17,13 @@ ViewHandler::ViewHandler(QWidget *parent) {
   scene = new QGraphicsScene(this);
   this->setScene(scene);
 
-  time_line = new TimeLine(nullptr);
-  time_line->move(0, TIME_LINE_POS);
-  scene->addWidget(time_line);
+  time_line.move(0, TIME_LINE_POS);
+  scene->addWidget(&time_line);
 }
 
 void ViewHandler::resizeEvent(QResizeEvent *evt) {
-  time_line->move(0, TIME_LINE_POS);
-  time_line->setFixedWidth(width());
+  time_line.move(0, TIME_LINE_POS);
+  time_line.setFixedWidth(width());
   emit recalcVisibleObjectRequired();
   return QWidget::resizeEvent(evt);
 }

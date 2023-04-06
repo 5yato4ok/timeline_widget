@@ -21,11 +21,11 @@ public slots:
   void setGenerationButtonStatus(bool status);
 
 private:
-  GenerationHandler *gen_handler;
-  ViewHandler *view_handler;
+  GenerationHandler gen_handler;
+  ViewHandler view_handler;
   Ui::MainWindow ui;
   Ui::Dialog ui_dialog;
-  QDialog *dialog;
+  QDialog dialog;
 };
 } // namespace time_line
 #endif // MAINWINDOW_H
