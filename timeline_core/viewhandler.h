@@ -21,6 +21,7 @@ class ViewHandler : public QGraphicsView {
   Q_OBJECT
 public:
   using VisibleWidgetsStorage = std::unordered_map<QObject *, std::shared_ptr<QWidget>>;
+
   explicit ViewHandler(QWidget *parent = 0);
   void resizeEvent(QResizeEvent *event) override;
   VisibleWidgetsStorage get_visible_widgets();

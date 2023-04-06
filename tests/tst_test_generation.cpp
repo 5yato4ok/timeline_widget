@@ -21,9 +21,8 @@ private slots:
 };
 
 void test_generation::test_generation_of_draw_objs() {
-  GenerationHandler gen_handler;
   ViewHandler view_handler;
-
+  GenerationHandler gen_handler;
   connect(&gen_handler, &GenerationHandler::visibleObjsGenerated, &view_handler,
           &ViewHandler::drawVisibleObjects);
 
