@@ -17,6 +17,8 @@ public:
   explicit DrawElementWidget(const TimeLineItem &desc,
                              QWidget *parent = nullptr);
   void paintEvent(QPaintEvent *event) override;
+
+protected:
   virtual QString getDescription() = 0;
   virtual QString getName() = 0;
   virtual QPalette getPalette() = 0;
