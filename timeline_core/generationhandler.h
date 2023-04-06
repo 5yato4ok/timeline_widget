@@ -45,7 +45,7 @@ private:
   VisibleObjs mergeVisibleObjsParts(const VisibleObjsParted &objs_to_merge, double scale);
   bool isProcessingGeneration();
 
-  const int MAX_CNT_BOOKMARK = 100000000;
+  const size_t MAX_CNT_BOOKMARK = 100000000;
   const int MAX_BKMRK_DURATION = 3 * 60 * 60 * 60;
   const int MIN_BKMRK_DURATION = 1 * 60;
 

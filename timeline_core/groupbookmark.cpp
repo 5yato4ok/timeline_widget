@@ -12,7 +12,7 @@ QString GroupBookMark::getDescription() {
   QString res;
   auto last_bkmrk =
       desc_draw.bkmrks_idxs.size() > 15 ? 15 : desc_draw.bkmrks_idxs.size();
-  int i = 0;
+  size_t i = 0;
   for (i = 0; i < last_bkmrk; i++) {
     res += "Bookmark " + QString::number(desc_draw.bkmrks_idxs[i]) + "\n";
   }

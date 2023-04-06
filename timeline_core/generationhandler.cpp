@@ -47,7 +47,7 @@ void GenerationHandler::startGeneration() {
 }
 
 void GenerationHandler::generateBkmrks() {
-  auto cpuCount = num_of_bkmrs > 100 ? QThread::idealThreadCount() : 1;
+  size_t cpuCount = num_of_bkmrs > 100 ? QThread::idealThreadCount() : 1;
   PartedStorageOfBkmrks bkmrks_parted;
   bkmrks_parted.resize(cpuCount);
   std::vector<std::future<void>> futures;
@@ -56,7 +56,7 @@ void GenerationHandler::generateBkmrks() {
   for (size_t i = 0; i < cpuCount; i++) {
     int start = i * max / cpuCount;
     int end = i + 1 < cpuCount ? ((i + 1) * max / cpuCount) : max;
-    int count = i + 1 < cpuCount ? part_count : num_of_bkmrs - i * part_count;
+    size_t count = i + 1 < cpuCount ? part_count : num_of_bkmrs - i * part_count;
     bkmrks_parted[i].reserve(count);
     futures.push_back(
         async(std::launch::async, [this, start, end, count, i, &bkmrks_parted] {
@@ -80,7 +80,7 @@ GenerationHandler::mergeVisibleObjsParts(const VisibleObjsParted &parts,
   if (parts.size() == 1)
     return parts.front();
   vector<TimeLineItem> res = parts.front();
-  for (int i = 1; i < parts.size(); i++) {
+  for (size_t i = 1; i < parts.size(); i++) {
     auto &curMergePart = parts.at(i);
     auto it_beg = curMergePart.begin();
     if (res.back().intersects(curMergePart.front(), scale)) {
@@ -153,7 +153,7 @@ vector<TimeLineItem> GenerationHandler::generateVisibleObjsSingleThread(
     return {};
   TimeLineItem cur_group(bkmrks.front(), {start_bkmrk + 1});
   VisibleObjs res;
-  for (int i = 1; i < bkmrks.size(); i++) {
+  for (size_t i = 1; i < bkmrks.size(); i++) {
     int bkmrk_idx = start_bkmrk + i + 1;
     if (cur_group.intersects(bkmrks.at(i), millisec_per_pixel)) {
       cur_group.bkmrks_idxs.push_back(bkmrk_idx);
